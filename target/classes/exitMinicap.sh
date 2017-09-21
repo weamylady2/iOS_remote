@@ -1,0 +1,1 @@
+kill -9 $(ps -ef|grep ios_minicap |awk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')
