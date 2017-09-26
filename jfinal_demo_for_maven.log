@@ -1,6 +1,6 @@
 
-2017-09-22 09:57:03
-[ERROR]-[Thread: http-bio-8080-exec-10]-[com.jfinal.core.ActionHandler.handle()]: /ios/tap/?x=101&y=624
+2017-09-26 08:39:45
+[ERROR]-[Thread: http-bio-8080-exec-4]-[com.jfinal.core.ActionHandler.handle()]: /ios/tap/?x=110&y=613
 com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : /Users/waterhuang/workspace/iOS_remote/target/jfinal_demo_for_maven/ios/WDA is no running!
 	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
 	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
