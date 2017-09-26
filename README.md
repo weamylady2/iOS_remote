@@ -70,7 +70,7 @@ $cd /Users/yourname/WebDriverAgent
 ```
 5、Configure iOS_remote</br></br>
 
-This is maven project.</br></br>
+iOS_remote is a maven project.</br></br>
 
 * Open iOS_remote in Eclipse</br></br>
 Open Eclipse </br></br>
