@@ -73,20 +73,15 @@ $cd /Users/yourname/WebDriverAgent
 This is maven project.</br></br>
 
 * Open iOS_remote in Eclipse</br></br>
-
 Open Eclipse </br></br>
-
-Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br></br>
+**Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish**</br></br>
 
 * Change Config</br></br>
-
 In iOS_remote</br></br>
-
-Java Resources->src/main/resource->config.properties</br></br>
-
+**Java Resources->src/main/resource->config.properties**</br></br>
 In config.properties</br></br>
+**change code(change three parameters:minicapPath、wdaPath、bashPath)**</br></br>
 
-change code(change three parameters:minicapPath、wdaPath、bashPath)</br></br>
 ```
 minicapPath=/Users/yourname/ios-minicap-master
 wdaPath=/Users/yourname/WebDriverAgent
