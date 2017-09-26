@@ -30,6 +30,7 @@ public class ExecuteUtil {
 
         String minicapPath = PropKit.get("minicapPath");
         ProcessBuilder pb = new ProcessBuilder(minicapPath+"/run.sh");
+        pb.directory(new File(minicapPath));
         Process p = pb.start();
 //        int exitCode = p.waitFor();
         readProcessOutput(p);
