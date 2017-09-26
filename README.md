@@ -38,11 +38,11 @@ Limited in Mac
 
 ## Install
 1、Install support</br></br>
-&#160; &#160;(1).[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
+* &#160; &#160;[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
 ```
 brew install usbmuxd
 ```
-&#160; &#160;(2).[libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
+* &#160; &#160;[libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
 ```
 sudo brew update
 sudo brew install libimobiledevice
