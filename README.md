@@ -37,7 +37,7 @@ Limited in Mac
 [WebDriverAgent Q&A](https://testerhome.com/topics/9666)
 
 ## Install
-1、Install support
+1、Install support</br></br>
 (1).[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
 ```
 brew install usbmuxd
@@ -67,16 +67,16 @@ $cd /Users/yourname/ios-minicap-master
 ```
 $cd /Users/yourname/WebDriverAgent
 ```
-5、Configure iOS_remote</br>
-This is maven project.</br>
-(1).Open iOS_remote in Eclipse</br>
-Open Eclipse </br>
-Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br>
-(2).Change Config</br>
-In iOS_remote</br>
-Java Resources->src/main/resource->config.properties</br>
-In config.properties</br>
-change code(change three parameters:minicapPath、wdaPath、bashPath)</br>
+5、Configure iOS_remote</br></br>
+This is maven project.</br></br>
+(1).Open iOS_remote in Eclipse</br></br>
+Open Eclipse </br></br>
+Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br></br>
+(2).Change Config</br></br>
+In iOS_remote</br></br>
+Java Resources->src/main/resource->config.properties</br></br>
+In config.properties</br></br>
+change code(change three parameters:minicapPath、wdaPath、bashPath)</br></br>
 ```
 minicapPath=/Users/yourname/ios-minicap-master
 wdaPath=/Users/yourname/WebDriverAgent
@@ -84,19 +84,21 @@ bashPath=/Users/yourname/ios_remote/src/main/resources
 wdaPort=8200
 minicapPort=12345
 ```
-Change the three parameters into your project path</br>
-6、Run iOS_remote</br>
-（1).Open iproxy</br>
-Open one terminal window</br>
+Change the three parameters into your project path</br></br>
+6、Run iOS_remote</br></br>
+（1).Open iproxy</br></br>
+Open one terminal window</br></br>
 ```
 $iproxy 8200 8100
 ```
-(2).Run iOS_remote</br>
+(2).Run iOS_remote</br></br>
 ```
 $cd /Users/yourname/iOS_remote
 $mvn tomcat7:run-war
 ```
-(3).Show in browser</br>
+(3).Show in browser</br></br>
 Open the ios remote page by url::`http://localhost:8080/ios/`
 
 
+# LICENSE
+Under [MIT](LICENSE)
