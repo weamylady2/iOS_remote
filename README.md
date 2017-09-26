@@ -14,6 +14,7 @@ Limited in Mac
 - [x] Support Package management API
 - [x] Support launch WDA
 - [x] iOS device remote control
+- [x] Based on Java
 
 ## Requirements
 * brew install libjpeg-turbo (>=1.5 is required)
@@ -38,11 +39,11 @@ Limited in Mac
 
 ## Install
 1、Install support</br></br>
-* &#160; &#160;[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
+* [usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
 ```
 brew install usbmuxd
 ```
-* &#160; &#160;[libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
+* [libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
 ```
 sudo brew update
 sudo brew install libimobiledevice
@@ -71,13 +72,13 @@ $cd /Users/yourname/WebDriverAgent
 
 This is maven project.</br></br>
 
-&#160; &#160;(1).Open iOS_remote in Eclipse</br></br>
+* Open iOS_remote in Eclipse</br></br>
 
 Open Eclipse </br></br>
 
 Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br></br>
 
-&#160; &#160;(2).Change Config</br></br>
+* Change Config</br></br>
 
 In iOS_remote</br></br>
 
@@ -94,18 +95,19 @@ wdaPort=8200
 minicapPort=12345
 ```
 Change the three parameters into your project path</br></br>
+
 6、Run iOS_remote</br></br>
-&#160; &#160;(1).Open iproxy</br></br>
+* Open iproxy</br></br>
 Open one terminal window</br></br>
 ```
 $iproxy 8200 8100
 ```
-&#160; &#160;(2).Run iOS_remote</br></br>
+* Run iOS_remote</br></br>
 ```
 $cd /Users/yourname/iOS_remote
 $mvn tomcat7:run-war
 ```
-&#160; &#160;(3).Show in browser</br></br>
+* Show in browser</br></br>
 Open the ios remote page by url::`http://localhost:8080/ios/`
 
 
