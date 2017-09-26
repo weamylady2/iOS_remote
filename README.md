@@ -49,16 +49,16 @@ $cd /Users/yourname/ios-minicap-master
 ```
 $cd /Users/yourname/WebDriverAgent
 ```
-4、Configure iOS_remote
-This is maven project.
-(1).Open iOS_remote in Eclipse
-Open Eclipse <br>
-Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish<br>
-(2).Change Config
-In iOS_remote<br>
-Java Resources->src/main/resource->config.properties<br>
-In config.properties<br>
-change code(change three parameters:minicapPath、wdaPath、bashPath)<br>
+4、Configure iOS_remote</br>
+This is maven project.</br>
+(1).Open iOS_remote in Eclipse</br>
+Open Eclipse </br>
+Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br>
+(2).Change Config</br>
+In iOS_remote</br>
+Java Resources->src/main/resource->config.properties</br>
+In config.properties</br>
+change code(change three parameters:minicapPath、wdaPath、bashPath)</br>
 ```
 minicapPath=/Users/yourname/ios-minicap-master
 wdaPath=/Users/yourname/WebDriverAgent
@@ -66,19 +66,19 @@ bashPath=/Users/yourname/ios_remote/src/main/resources
 wdaPort=8200
 minicapPort=12345
 ```
-Change the three parameters into your project path<br>
-5、Run iOS_remote
-（1).Open iproxy
-Open one terminal window
+Change the three parameters into your project path</br>
+5、Run iOS_remote</br>
+（1).Open iproxy</br>
+Open one terminal window</br>
 ```
 $iproxy 8200 8100
 ```
-(2).Run iOS_remote
+(2).Run iOS_remote</br>
 ```
 $cd /Users/yourname/iOS_remote
 $mvn tomcat7:run-war
 ```
-(3).Show in browser
+(3).Show in browser</br>
 Open the ios remote page by url::`http://localhost:8080/ios/`
 
 
