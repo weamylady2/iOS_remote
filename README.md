@@ -1,6 +1,6 @@
 # iOS_remote
--iOS Remote Real Machine
--Combine [WebDriverAgent](https://github.com/facebook/WebDriverAgent) and [ios-minicap](https://github.com/openstf/ios-minicap) 
+iOS Remote Real Machine</br></br>
+Combine [WebDriverAgent](https://github.com/facebook/WebDriverAgent) and [ios-minicap](https://github.com/openstf/ios-minicap) 
 
 ## Platform
 Limited in Mac
@@ -32,17 +32,17 @@ Limited in Mac
 * usbmuxd
 
 ## Other Help Document
-[How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)
-[How to install WebDriverAgent](https://testerhome.com/topics/4904)
-[WebDriverAgent Q&A](https://testerhome.com/topics/9666)
+[How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
+[How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
+[WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
 
 ## Install
 1、Install support</br></br>
-(1).[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
+&#160; &#160;(1).[usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
 ```
 brew install usbmuxd
 ```
-(2).[libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
+&#160; &#160;(2).[libimobiledevice and ideviceinstaller](http://blog.csdn.net/yxys01/article/details/76868493)
 ```
 sudo brew update
 sudo brew install libimobiledevice
@@ -68,14 +68,23 @@ $cd /Users/yourname/ios-minicap-master
 $cd /Users/yourname/WebDriverAgent
 ```
 5、Configure iOS_remote</br></br>
+
 This is maven project.</br></br>
-(1).Open iOS_remote in Eclipse</br></br>
+
+&#160; &#160;(1).Open iOS_remote in Eclipse</br></br>
+
 Open Eclipse </br></br>
+
 Import->Maven->Existing Maven Projects->Next->Browse(iOS_remote's path)->Finish</br></br>
-(2).Change Config</br></br>
+
+&#160; &#160;(2).Change Config</br></br>
+
 In iOS_remote</br></br>
+
 Java Resources->src/main/resource->config.properties</br></br>
+
 In config.properties</br></br>
+
 change code(change three parameters:minicapPath、wdaPath、bashPath)</br></br>
 ```
 minicapPath=/Users/yourname/ios-minicap-master
@@ -86,17 +95,17 @@ minicapPort=12345
 ```
 Change the three parameters into your project path</br></br>
 6、Run iOS_remote</br></br>
-（1).Open iproxy</br></br>
+&#160; &#160;(1).Open iproxy</br></br>
 Open one terminal window</br></br>
 ```
 $iproxy 8200 8100
 ```
-(2).Run iOS_remote</br></br>
+&#160; &#160;(2).Run iOS_remote</br></br>
 ```
 $cd /Users/yourname/iOS_remote
 $mvn tomcat7:run-war
 ```
-(3).Show in browser</br></br>
+&#160; &#160;(3).Show in browser</br></br>
 Open the ios remote page by url::`http://localhost:8080/ios/`
 
 
