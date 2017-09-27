@@ -90,7 +90,9 @@ public class ExecuteUtil {
 
     public String getUDID() throws IOException, InterruptedException {
 
-        ProcessBuilder pb = new ProcessBuilder("/Users/waterhuang/workspace/ios_remote/src/main/resources/getUDID.sh");
+        String bashPath = PropKit.get("bashPath");
+
+        ProcessBuilder pb = new ProcessBuilder(bashPath + "/getUDID.sh");
         Process p = pb.start();
         p.waitFor();
         return getOutputString(p.getInputStream()).trim();

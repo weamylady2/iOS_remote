@@ -6,18 +6,34 @@ import com.jfinal.kit.PropKit;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.demo.ios.HttpClientUtil;
+import java.io.File;
+import java.io.IOException;
 
 public class IosController extends Controller {
 
     HttpClientUtil client = new HttpClientUtil();
+    private ExecuteUtil bash = new ExecuteUtil();
 
     public static String sessionId="";
 
     public void index()  {
-
-
         render("ios.html");
 
+    }
+
+    public void initWda() throws JSONException, IOException, InterruptedException {
+
+        String wdaPort = PropKit.get("wdaPort");
+        String udid = bash.getUDID().trim();
+        JSONObject tapLoc = new JSONObject("{\"desiredCapabilities\":{\"bundleId\":\"com.apple.Preferences\",\"arguments\":[],\"environment\":{},\"shouldWaitForQuiescence\":true,\"shouldUseTestManagerForVisibilityDetection\":false,\"maxTypingFrequency\":60,\"shouldUseSingletonTestManager\":true}}");
+        System.out.println(tapLoc.toString());
+        String tapResult = client.sendHttpPostJson("http://localhost:"+wdaPort+"/session",tapLoc.toString());
+        System.out.println("God Result: " + tapResult);
+        if(null == tapResult){
+            render("WDA is no running!");
+            return;
+        }
+        renderJson(tapResult);
     }
 
 

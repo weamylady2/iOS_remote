@@ -1,8 +1,0 @@
-
-2017-09-12 14:48:36
-[ERROR]-[Thread: main]-[com.jfinal.kit.LogKit.error()]: port: 8080 already in use!
-java.lang.IllegalStateException: port: 8080 already in use!
-	at com.jfinal.server.JettyServerForIDEA.doStart(JettyServerForIDEA.java:89)
-	at com.jfinal.server.JettyServerForIDEA.start(JettyServerForIDEA.java:72)
-	at com.jfinal.core.JFinal.start(JFinal.java:169)
-	at com.demo.common.DemoConfig.main(DemoConfig.java:55)

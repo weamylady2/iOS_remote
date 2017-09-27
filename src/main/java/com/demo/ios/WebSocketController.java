@@ -16,6 +16,9 @@ import javax.websocket.server.ServerEndpoint;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.redis.Redis;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.demo.ios.*;
 
 import java.nio.ByteBuffer;
 
@@ -44,8 +47,9 @@ public class WebSocketController {
     private final ExecuteUtil bash = new ExecuteUtil();
     private static final int minicapPort = Integer.parseInt(PropKit.get("minicapPort"));
 
+
     @OnOpen
-    public void onOpen(Session session) throws IOException, InterruptedException {
+    public void onOpen(Session session) throws IOException, InterruptedException, JSONException {
 //        session.getBasicRemote().sendText("Helloword!");
 //        System.out.println("Connected!!!!!!!!!!!!!");
 
@@ -82,6 +86,13 @@ public class WebSocketController {
             }
         }
 
+        if(!socketConnected){
+            System.out.println("Session Closing...");
+            session.close();
+            return;
+        }
+
+
         while (true) {
             if(!socketConnected){
                 System.out.println("Session Closing...");
@@ -117,6 +128,13 @@ public class WebSocketController {
 
 
     }
+
+    public void initWDA() throws JSONException, IOException, InterruptedException {
+        IosController c = new IosController();
+        c.initWda();
+    }
+
+
 
     public void closeWDA() throws IOException, InterruptedException {
         System.out.println("closing wda...");
@@ -156,7 +174,7 @@ public class WebSocketController {
 //        }).start();
     }
 
-    public void startWDA() throws InterruptedException {
+    public void startWDA() throws InterruptedException, IOException, JSONException {
         System.out.println("starting wda...");
         new Thread(new Runnable() {
 
@@ -176,6 +194,8 @@ public class WebSocketController {
         int i=30;
         while(i-- > 0){
             if(bash.isWdaOpened()){
+                System.out.println("wda stared, initing WDA...");
+                initWDA();
                 return;
             }else{
                 Thread.sleep(1000);
