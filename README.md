@@ -8,8 +8,6 @@ Limited in Mac
 ## Features
 - [x] Launch iproxy when start
 - [x] Create http proxy for WDA server
-- [x] add udid into `GET /status`
-- [x] forward all url starts with `/origin/<url>` to `/<url>`
 - [x] Add the missing Index page
 - [x] Support Package management API
 - [x] Support launch WDA
@@ -36,8 +34,8 @@ Limited in Mac
 [How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
 [How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
 [WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
-[Eclipse Import Maven Project](http://blog.csdn.net/yxys01/article/details/78111229)
-[Configure Tomcat9 In Mac](http://blog.csdn.net/yxys01/article/details/77715330)
+[Eclipse Import Maven Project](http://blog.csdn.net/yxys01/article/details/78111229)</br></br>
+[Configure Tomcat9 In Mac](http://blog.csdn.net/yxys01/article/details/77715330)</br></br>
 ## Install
 1、Install support</br></br>
 * [usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
