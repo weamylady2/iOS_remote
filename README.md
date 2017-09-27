@@ -36,7 +36,8 @@ Limited in Mac
 [How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
 [How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
 [WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
-
+[Eclipse Import Maven Project](http://blog.csdn.net/yxys01/article/details/78111229)
+[Configure Tomcat9 In Mac](http://blog.csdn.net/yxys01/article/details/77715330)
 ## Install
 1、Install support</br></br>
 * [usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
