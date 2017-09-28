@@ -52,7 +52,7 @@ public class ExecuteUtil {
         Process p = pb.start();
 //        int exitCode = p.waitFor();
 
-        Thread.sleep(15000);
+        Thread.sleep(20000);
         wdaOpened = true;
         readProcessOutput(p);
 
