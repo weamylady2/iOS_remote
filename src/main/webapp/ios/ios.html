@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <title>ios-remote</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <script src="//cdn.jsdelivr.net/g/vue@2.1.10,jquery@3.1.1"></script>
 <script src="/js/vue.js"></script>
@@ -29,7 +31,7 @@
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
             请耐心等待，不要使劲刷新...
-            目前支持点击、滑动、长按、Home键操作。sendText功能在Xcode9以上的环境不太好使。
+            目前支持点击、滑动、长按、Home键操作。sendText功能需要launch App。
             如果发现操作无响应，请刷新此页面。
         </div>
         <div class="col-sm-6">
@@ -39,10 +41,20 @@
                     <span class="glyphicon glyphicon-home"></span> Home
                 </button>
             </div>
-            <div class="form-group">目前Xcode9环境下的sendText和Clear不起作用，后续想办法解决中...</div>
+            <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
             <div class="form-group">
                 <div class="input-group">
-                    <input id="input" type="text" class="form-control" v-model="inputText" placeholder="Input text ..."
+                    <input id="bundleid" type="text" class="form-control" v-model="inputText"
+                           placeholder="请输入bundle id">
+                    <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="launchApp()">Launch App By BundleId</button>
+                        </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="input" type="text" class="form-control" v-model="inputText"
+                           placeholder="Input text ..."
                            @keyup.enter="sendText(inputText+'\n')">
                     <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="sendText()">SendText</button>
@@ -64,8 +76,10 @@
                 </form>
                 <hr>
                 <div class="list-group">
-                    <button v-for="r in records" type="button" @click="play(r)" style="height: 34px; padding: 7px 15px;"
-                            class="list-group-item">{{r.name}} camera.mp4 <span class="badge">2:12</span></button>
+                    <button v-for="r in records" type="button" @click="play(r)"
+                            style="height: 34px; padding: 7px 15px;"
+                            class="list-group-item">{{r.name}} camera.mp4 <span class="badge">2:12</span>
+                    </button>
                 </div>
                 <div>
                     <video width="320" height="240" controls>
@@ -94,6 +108,20 @@
             .then(function (ret) {
                 console.log(ret);
             })
+    }
+
+    function launchApp() {
+        var id = document.getElementById('bundleid').value
+        if (id != "") {
+            $.ajax({
+                url: "/ios/launchapp?id=" + id,
+                method: "GET",
+
+            })
+                .then(function (ret) {
+                    console.log(ret);
+                })
+        }
     }
 
     function sendText() {
@@ -399,7 +427,7 @@
 
 
 <script>
-    var WSURL = "ws://"+window.location.host+"/websocket"
+    var WSURL = "ws://" + window.location.host + "/websocket"
     /*jshint browser:true*/
 
     // BackFrame stores the latest frame retrieved from the socket. It does no
