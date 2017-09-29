@@ -15,6 +15,7 @@ public class IosController extends Controller {
     private ExecuteUtil bash = new ExecuteUtil();
 
     public static String sessionId="";
+    public static String wdaPort = PropKit.get("wdaPort");
 
     public void index()  {
         render("ios.html");
@@ -23,8 +24,7 @@ public class IosController extends Controller {
 
     public void initWda() throws JSONException, IOException, InterruptedException {
 
-        String wdaPort = PropKit.get("wdaPort");
-        String udid = bash.getUDID().trim();
+//        String wdaPort = PropKit.get("wdaPort");
         JSONObject tapLoc = new JSONObject("{\"desiredCapabilities\":{\"bundleId\":\"com.apple.Preferences\",\"arguments\":[],\"environment\":{},\"shouldWaitForQuiescence\":true,\"shouldUseTestManagerForVisibilityDetection\":false,\"maxTypingFrequency\":60,\"shouldUseSingletonTestManager\":true}}");
         System.out.println(tapLoc.toString());
         String tapResult = client.sendHttpPostJson("http://localhost:"+wdaPort+"/session",tapLoc.toString());
@@ -33,6 +33,7 @@ public class IosController extends Controller {
             render("WDA is no running!");
             return;
         }
+        home();
         renderJson(tapResult);
     }
 
@@ -56,7 +57,7 @@ public class IosController extends Controller {
         if(this.sessionId == "") {
             getSessionId();
         }
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         JSONObject tapLoc = new JSONObject();
         tapLoc.put("x",getPara("x"));
         tapLoc.put("y",getPara("y"));
@@ -78,7 +79,7 @@ public class IosController extends Controller {
         if(this.sessionId == "") {
             getSessionId();
         }
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         JSONObject tapPara = new JSONObject();
         tapPara.put("x",getPara("x"));
         tapPara.put("y",getPara("y"));
@@ -103,7 +104,7 @@ public class IosController extends Controller {
         if(this.sessionId == "") {
             getSessionId();
         }
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         JSONObject swipePara = new JSONObject();
         swipePara.put("fromX",getPara("fromX"));
         swipePara.put("fromY",getPara("fromY"));
@@ -128,7 +129,7 @@ public class IosController extends Controller {
         if(this.sessionId == "") {
             getSessionId();
         }
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         JSONObject inputPara = new JSONObject();
         inputPara.put("value",getPara("value").toCharArray());
         System.out.println(inputPara.toString());
@@ -146,12 +147,32 @@ public class IosController extends Controller {
         renderJson(inputResult);
     }
 
+
+    public void launchapp() throws JSONException {
+
+//        String wdaPort = PropKit.get("wdaPort");
+        String bundleid = getPara("id");
+        System.out.println("lanuching app id: " + bundleid);
+
+        JSONObject launchCaps = new JSONObject("{\"desiredCapabilities\":{\"bundleId\":\""+bundleid+"\",\"arguments\":[],\"environment\":{},\"shouldWaitForQuiescence\":true,\"shouldUseTestManagerForVisibilityDetection\":false,\"maxTypingFrequency\":60,\"shouldUseSingletonTestManager\":true}}");
+        System.out.println(launchCaps.toString());
+        String launchResult = client.sendHttpPostJson("http://localhost:"+wdaPort+"/session",launchCaps.toString());
+        System.out.println("Got Result: " + launchResult);
+        if(null == launchResult){
+            render("WDA is no running!");
+            return;
+        }
+        renderJson(launchResult);
+        getSessionId();
+
+    }
+
     public void clear() throws JSONException {
         if(this.sessionId == "") {
             getSessionId();
         }
         JSONObject inputPara = new JSONObject();
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         char[] delText = new char[30];
         for(int i=0;i<30;i++)
         {
@@ -176,7 +197,7 @@ public class IosController extends Controller {
 
 
     public void getSessionId(){
-        String wdaPort = PropKit.get("wdaPort");
+//        String wdaPort = PropKit.get("wdaPort");
         try {
             String status = client.sendHttpGet("http://localhost:"+wdaPort+"/status");
             JSONObject statusJson = null;
