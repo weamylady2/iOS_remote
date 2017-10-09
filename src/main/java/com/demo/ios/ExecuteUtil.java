@@ -99,6 +99,15 @@ public class ExecuteUtil {
 
     }
 
+    public String getDeviceName() throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("idevicename");
+        Process p = pb.start();
+        p.waitFor();
+        return getOutputString(p.getInputStream()).trim();
+
+    }
+
 
     public void exitWDA() throws IOException, InterruptedException {
 

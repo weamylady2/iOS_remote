@@ -104,7 +104,7 @@ public class WebSocketController {
                 ByteBuffer bBuffer = ByteBuffer.wrap(finalBytes);
 //                System.out.println("发送图片的大小为：" + finalBytes.length);
                 session.getBasicRemote().sendBinary(bBuffer);
-                finalBytes = null;
+//                finalBytes = null;
                 ready = false;
             } else{
                 Thread.sleep(20);

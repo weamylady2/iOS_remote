@@ -62,33 +62,22 @@
             </span>
                 </div>
             </div>
-            <!-- /input-group -->
-            <div style="display: none">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-sm" @click="toggleRecord">
-                            <span v-if="!record.running" class="color-red glyphicon glyphicon-record"></span>
-                            <span v-if="record.running" class="color-red glyphicon glyphicon-stop"></span>
-                            录制 <span v-text="record.prompt"></span> <span v-if="record.running">{{record.duration|formatDuration}}</span>
-                        </button>
-                        <input type="text" class="form-control input-sm" placeholder="Notes 备注">
-                    </div>
-                </form>
-                <hr>
-                <div class="list-group">
-                    <button v-for="r in records" type="button" @click="play(r)"
-                            style="height: 34px; padding: 7px 15px;"
-                            class="list-group-item">{{r.name}} camera.mp4 <span class="badge">2:12</span>
-                    </button>
-                </div>
-                <div>
-                    <video width="320" height="240" controls>
-                        <source src="" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div id="chart_div"></div>
-                </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">设备详情</h3>
             </div>
+            <table id="deviceinfo" class="table">
+                <tbody>
+                <tr>
+                    <td>设备名称</td>
+                    <td id="name" v-text="device.name"></td>
+                </tr>
+                <tr>
+                    <td>UDID</td>
+                    <td id="udid" v-text="device.udid"></td>
+                </tr>
+
+                </tbody>
+            </table>
         </div>
 
 
@@ -99,6 +88,29 @@
 </body>
 
 <script>
+
+    var deviceDetail = new Vue({
+        el: "#deviceinfo",
+        data: {
+            device: {
+                name: '',
+                udid: '',
+            },
+        },
+        mounted: function () {
+            var self = this;
+            $.ajax({
+                url: "/ios/getDeviceInfo?",
+                method: "GET",
+            })
+                .then(function (ret) {
+                    self.device.udid = ret.udid
+                    self.device.name = ret.name
+                    console.log(udid)
+                })
+
+        },
+    });
 
     function home() {
         $.ajax({
@@ -124,9 +136,23 @@
         }
     }
 
-    function sendText() {
+    function getDeviceInfo() {
+        var udid = "";
         $.ajax({
-            url: "/ios/inputText?value=" + document.getElementById('input').value,
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                udid = ret.udid
+                console.log(udid)
+            })
+    }
+
+    function sendText() {
+        var sendValue = encodeURI(encodeURI(document.getElementById('input').value))
+        console.log("Input Text = " + sendValue)
+        $.ajax({
+            url: "/ios/inputText?value=" + sendValue,
             method: "GET",
 
         })
@@ -603,7 +629,7 @@
     }
 
     ws.onmessage = function (message) {
-        console.log('got jpeg', arguments)
+//        console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
             type: 'image/jpeg'
         })

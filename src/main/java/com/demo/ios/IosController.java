@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import com.demo.ios.HttpClientUtil;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class IosController extends Controller {
 
@@ -17,7 +19,8 @@ public class IosController extends Controller {
     public static String sessionId="";
     public static String wdaPort = PropKit.get("wdaPort");
 
-    public void index()  {
+    public void index() throws IOException, InterruptedException, JSONException {
+
         render("ios.html");
 
     }
@@ -35,6 +38,19 @@ public class IosController extends Controller {
         }
         home();
         renderJson(tapResult);
+    }
+
+    public void getDeviceInfo() throws IOException, InterruptedException, JSONException {
+        String udid = bash.getUDID();
+        System.out.println("Got UDID: " + udid);
+        String name = bash.getDeviceName();
+
+
+
+        JSONObject para = new JSONObject();
+        para.put("udid",udid);
+        para.put("name",name);
+        renderJson(para.toString());
     }
 
 
@@ -125,14 +141,15 @@ public class IosController extends Controller {
         renderJson(swipeResult);
     }
 
-    public void inputText() throws JSONException {
+    public void inputText() throws JSONException, UnsupportedEncodingException {
         if(this.sessionId == "") {
             getSessionId();
         }
 //        String wdaPort = PropKit.get("wdaPort");
         JSONObject inputPara = new JSONObject();
-        inputPara.put("value",getPara("value").toCharArray());
-        System.out.println(inputPara.toString());
+        String gotValue = URLDecoder.decode(getPara("value"), "utf-8");
+        inputPara.put("value",gotValue.toCharArray());
+        System.out.println("#####got value： " + gotValue);
         String inputResult = client.sendHttpPostJson("http://localhost:"+wdaPort+"/session/"  + this.sessionId+ "/wda/keys",inputPara.toString());
         if(null == inputResult){
             render("WDA is no running!");
