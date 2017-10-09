@@ -87,6 +87,15 @@ public class ExecuteUtil {
             System.err.println(ERROR_MESSAGE + exitCode);
         }
     }
+    public String getInstalledApp() throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("ideviceinstaller", "-l");
+        Process p = pb.start();
+        p.waitFor();
+        String out = getOutputString(p.getInputStream());
+        out.replaceAll("\n", "<br />");
+        return out;
+    }
+
 
     public String getUDID() throws IOException, InterruptedException {
 

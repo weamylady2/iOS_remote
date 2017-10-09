@@ -30,9 +30,8 @@
         </div>
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
+            <br />
             请耐心等待，不要使劲刷新...
-            目前支持点击、滑动、长按、Home键操作。sendText功能需要launch App。
-            如果发现操作无响应，请刷新此页面。
         </div>
         <div class="col-sm-6">
             <hr>
@@ -68,12 +67,16 @@
             <table id="deviceinfo" class="table">
                 <tbody>
                 <tr>
-                    <td>设备名称</td>
+                    <td>设备名称：</td>
                     <td id="name" v-text="device.name"></td>
                 </tr>
                 <tr>
-                    <td>UDID</td>
+                    <td>UDID：</td>
                     <td id="udid" v-text="device.udid"></td>
+                </tr>
+                <tr>
+                    <td>已安装的App：</td>
+                    <td id="apps"> {{device.apps}}</td>
                 </tr>
 
                 </tbody>
@@ -95,6 +98,7 @@
             device: {
                 name: '',
                 udid: '',
+                apps: '',
             },
         },
         mounted: function () {
@@ -106,6 +110,7 @@
                 .then(function (ret) {
                     self.device.udid = ret.udid
                     self.device.name = ret.name
+                    self.device.apps = ret.apps
                     console.log(udid)
                 })
 

@@ -44,12 +44,13 @@ public class IosController extends Controller {
         String udid = bash.getUDID();
         System.out.println("Got UDID: " + udid);
         String name = bash.getDeviceName();
-
-
+        String apps = bash.getInstalledApp();
+        System.out.println("Got Apps: " + apps);
 
         JSONObject para = new JSONObject();
         para.put("udid",udid);
         para.put("name",name);
+        para.put("apps",apps);
         renderJson(para.toString());
     }
 
