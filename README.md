@@ -91,7 +91,46 @@ minicapPort=12345
 ```
 Change the three parameters into your project path</br></br>
 
-6、Run iOS_remote</br></br>
+6、Change and Rebuild ios-minicap</br></br>
+
+In order to reduce the pressure of MAC, we need to reduce the frequency of sending imgs from minicaps.</br></br>
+Go to the ios-minicap folder, and Edit the "src/minicap.cpp", Add a method:</br></br>
+```
+static void sleep_ms(unsigned int secs)
+{
+struct timeval tval;
+tval.tv_sec=secs/1000;
+tval.tv_usec=(secs*1000)%1000000;
+select(0,NULL,NULL,NULL,&tval);
+}
+```
+Then add a sleep in main:</br></br>
+```
+while (gWaiter.isRunning() and gWaiter.waitForFrame() > 0) {
+client.lockFrame(&frame);
+encoder.encode(&frame);
+client.releaseFrame(&frame);
+putUInt32LE(frameSize, encoder.getEncodedSize());
+if ( pumps(socket, frameSize, 4) < 0 ) {
+break;
+}
+if ( pumps(socket, encoder.getEncodedData(), encoder.getEncodedSize()) < 0 ) {
+break;
+}
+sleep_ms(50);
+}
+```
+Next step is rebuilding ios-minicap, runing the build.sh in ios-minicap folder:</br></br>
+```
+$ ./build.sh 
+mkdir: build: File exists
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/waterhuang/Downloads/ios-minicap-master/build
+[100%] Built target ios_minicap
+```
+
+7、Run iOS_remote</br></br>
 * Open iproxy</br></br>
 Open one terminal window</br></br>
 ```
