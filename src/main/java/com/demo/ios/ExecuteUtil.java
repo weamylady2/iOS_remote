@@ -52,7 +52,7 @@ public class ExecuteUtil {
         Process p = pb.start();
 //        int exitCode = p.waitFor();
 
-        Thread.sleep(15000);
+        Thread.sleep(20000);
         wdaOpened = true;
         readProcessOutput(p);
 
@@ -87,10 +87,30 @@ public class ExecuteUtil {
             System.err.println(ERROR_MESSAGE + exitCode);
         }
     }
+    public String getInstalledApp() throws IOException, InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("ideviceinstaller", "-l");
+        Process p = pb.start();
+        p.waitFor();
+        String out = getOutputString(p.getInputStream());
+        out.replaceAll("\n", "<br />");
+        return out;
+    }
+
 
     public String getUDID() throws IOException, InterruptedException {
 
-        ProcessBuilder pb = new ProcessBuilder("/Users/waterhuang/workspace/ios_remote/src/main/resources/getUDID.sh");
+        String bashPath = PropKit.get("bashPath");
+
+        ProcessBuilder pb = new ProcessBuilder(bashPath + "/getUDID.sh");
+        Process p = pb.start();
+        p.waitFor();
+        return getOutputString(p.getInputStream()).trim();
+
+    }
+
+    public String getDeviceName() throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("idevicename");
         Process p = pb.start();
         p.waitFor();
         return getOutputString(p.getInputStream()).trim();
