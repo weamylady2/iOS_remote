@@ -2,8 +2,8 @@
 iOS Remote Real Machine</br></br>
 Combine [WebDriverAgent](https://github.com/facebook/WebDriverAgent) and [ios-minicap](https://github.com/openstf/ios-minicap) 
 
-##Language
-[English](https://github.com/alibaba/uirecorder/blob/master/README.md), [中文](https://github.com/alibaba/uirecorder/blob/master/README_zh-cn.md)
+## Language
+[English](https://github.com/yxys01/iOS_remote/blob/master/README.md), [中文](https://github.com/yxys01/iOS_remote/blob/master/README_zh-cn.md)
 
 ## Platform
 Limited in Mac
