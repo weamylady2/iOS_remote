@@ -91,7 +91,10 @@ http://blog.csdn.net/yxys01/article/details/77045359
 ## <font color=#000000 size=5 face="黑体">7、安装iOS-remote</font>
 
 **(1)打开终端，clone该项目：**
-
+```
+$git clone https://github.com/weamylady2/iOS_remote
+```
+or
 ```
 $git clone https://github.com/yxys01/iOS_remote
 ```
