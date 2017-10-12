@@ -2,14 +2,15 @@
 iOS Remote Real Machine</br></br>
 Combine [WebDriverAgent](https://github.com/facebook/WebDriverAgent) and [ios-minicap](https://github.com/openstf/ios-minicap) 
 
+## Language
+[English](https://github.com/yxys01/iOS_remote/blob/master/README.md), [中文](https://github.com/yxys01/iOS_remote/blob/master/README_zh-cn.md)
+
 ## Platform
 Limited in Mac
 
 ## Features
 - [x] Launch iproxy when start
 - [x] Create http proxy for WDA server
-- [x] add udid into `GET /status`
-- [x] forward all url starts with `/origin/<url>` to `/<url>`
 - [x] Add the missing Index page
 - [x] Support Package management API
 - [x] Support launch WDA
@@ -36,7 +37,8 @@ Limited in Mac
 [How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
 [How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
 [WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
-
+[Eclipse Import Maven Project](http://blog.csdn.net/yxys01/article/details/78111229)</br></br>
+[Configure Tomcat9 In Mac](http://blog.csdn.net/yxys01/article/details/77715330)</br></br>
 ## Install
 1、Install support</br></br>
 * [usbmuxd](http://blog.csdn.net/yxys01/article/details/77188976)
@@ -147,4 +149,4 @@ Open the ios remote page by url::`http://localhost:8080/ios/`
 
 # LICENSE
 Under [MIT](LICENSE)
-=======
+

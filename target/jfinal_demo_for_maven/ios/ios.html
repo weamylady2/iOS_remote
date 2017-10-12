@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>ios-remote</title>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 <script src="//cdn.jsdelivr.net/g/vue@2.1.10,jquery@3.1.1"></script>
 <script src="/js/vue.js"></script>
+<script src="/js/canvas2image.js"></script>
 <body>
 
 <!--<canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>-->
@@ -21,6 +24,23 @@
                 <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
                 <span class="finger finger-1"></span>
                 <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
+                 <div>
+        			<p>
+         		    <button id="save">save</button> or <button id="convert">convert to</button> as: 
+         		      <select id="sel">
+         	        	<option value="png">png</option>
+          	        	<option value="jpeg">jpeg</option>
+           	        	<option value="bmp">bmp</option>
+            	      </select><br/>
+            	    width : <input type="number" value="300" id="imgW" /><br/>
+            		height : <input type="number" value="200" id="imgH" />
+            		fileName: <input type="text" placeholder="optional" id="imgFileName">            		
+        		   </p>
+
+    			</div>
+  			    <div id="imgs">
+        
+    			</div>
             </div>
         </div>
         <div class="col-sm-6 ">
@@ -28,9 +48,8 @@
         </div>
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
+            <br />
             请耐心等待，不要使劲刷新...
-            目前支持点击、滑动、长按、Home键操作。sendText功能在Xcode9以上的环境不太好使。
-            如果发现操作无响应，请刷新此页面。
         </div>
         <div class="col-sm-6">
             <hr>
@@ -39,10 +58,20 @@
                     <span class="glyphicon glyphicon-home"></span> Home
                 </button>
             </div>
-            <div class="form-group">目前Xcode9环境下的sendText和Clear不起作用，后续想办法解决中...</div>
+            <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
             <div class="form-group">
                 <div class="input-group">
-                    <input id="input" type="text" class="form-control" v-model="inputText" placeholder="Input text ..."
+                    <input id="bundleid" type="text" class="form-control" v-model="inputText"
+                           placeholder="请输入bundle id">
+                    <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="launchApp()">Launch App By BundleId</button>
+                        </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="input" type="text" class="form-control" v-model="inputText"
+                           placeholder="Input text ..."
                            @keyup.enter="sendText(inputText+'\n')">
                     <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="sendText()">SendText</button>
@@ -50,31 +79,41 @@
             </span>
                 </div>
             </div>
-            <!-- /input-group -->
-            <div style="display: none">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-sm" @click="toggleRecord">
-                            <span v-if="!record.running" class="color-red glyphicon glyphicon-record"></span>
-                            <span v-if="record.running" class="color-red glyphicon glyphicon-stop"></span>
-                            录制 <span v-text="record.prompt"></span> <span v-if="record.running">{{record.duration|formatDuration}}</span>
-                        </button>
-                        <input type="text" class="form-control input-sm" placeholder="Notes 备注">
-                    </div>
-                </form>
-                <hr>
-                <div class="list-group">
-                    <button v-for="r in records" type="button" @click="play(r)" style="height: 34px; padding: 7px 15px;"
-                            class="list-group-item">{{r.name}} camera.mp4 <span class="badge">2:12</span></button>
-                </div>
-                <div>
-                    <video width="320" height="240" controls>
-                        <source src="" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div id="chart_div"></div>
-                </div>
+
+            <div class="form-group">
+             <div class="input-group">
+
+              <iframe style="display: none" name="top"></iframe>
+               <!-- <form enctype="multipart/form-data" action="/ios/upload" method="post" target="top" class="form-inline" >-->  
+               <form enctype="multipart/form-data" action="/ios/servlet/upload" method="post" target="top" class="form-inline" > 
+               
+               <input type="file" name="uploadfile" />  
+               <input type="hidden" name="token" value="{...{.}...}" />  
+               <input type="submit" value="upload"/> 
+               </form>    
+
+             </div>
             </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">设备详情</h3>
+            </div>
+            <table id="deviceinfo" class="table">
+                <tbody>
+                <tr>
+                    <td>设备名称：</td>
+                    <td id="name" v-text="device.name"></td>
+                </tr>
+                <tr>
+                    <td>UDID：</td>
+                    <td id="udid" v-text="device.udid"></td>
+                </tr>
+                <tr>
+                    <td>已安装的App：</td>
+                    <td id="apps"> {{device.apps}}</td>
+                </tr>
+
+                </tbody>
+            </table>
         </div>
 
 
@@ -83,8 +122,67 @@
 </div>
 
 </body>
-
 <script>
+    var canvas, ctx,
+        $save, $imgs,
+        $convert, $imgW, $imgH,
+        $sel;
+    function init () {
+        canvas = document.getElementById('screen');
+        ctx = canvas.getContext('2d');
+        $save = document.getElementById('save');
+        $convert = document.getElementById('convert');
+        $sel = document.getElementById('sel');
+        $imgs = document.getElementById('imgs');
+        $imgW = document.getElementById('imgW');
+        $imgH = document.getElementById('imgH');
+        $imgFileName =document.getElementById('imgFileName');
+        bind();
+    }
+    function bind () {
+        $save.onclick = function (e) {
+            var type = $sel.value,
+                w = $imgW.value,
+                h = $imgH.value;
+                f = $imgFileName.value;
+            Canvas2Image.saveAsImage(canvas, w, h, type,f);
+        }
+        $convert.onclick = function (e) {
+            var type = $sel.value,
+                w = $imgW.value,
+                h = $imgH.value;
+            $imgs.appendChild(Canvas2Image.convertToImage(canvas, w, h, type))
+        }
+        
+    }    
+      onload = init;
+</script>
+<script>
+
+    var deviceDetail = new Vue({
+        el: "#deviceinfo",
+        data: {
+            device: {
+                name: '',
+                udid: '',
+                apps: '',
+            },
+        },
+        mounted: function () {
+            var self = this;
+            $.ajax({
+                url: "/ios/getDeviceInfo?",
+                method: "GET",
+            })
+                .then(function (ret) {
+                    self.device.udid = ret.udid
+                    self.device.name = ret.name
+                    self.device.apps = ret.apps
+                    console.log(udid)
+                })
+
+        },
+    });
 
     function home() {
         $.ajax({
@@ -96,9 +194,37 @@
             })
     }
 
-    function sendText() {
+    function launchApp() {
+        var id = document.getElementById('bundleid').value
+        if (id != "") {
+            $.ajax({
+                url: "/ios/launchapp?id=" + id,
+                method: "GET",
+
+            })
+                .then(function (ret) {
+                    console.log(ret);
+                })
+        }
+    }
+
+    function getDeviceInfo() {
+        var udid = "";
         $.ajax({
-            url: "/ios/inputText?value=" + document.getElementById('input').value,
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                udid = ret.udid
+                console.log(udid)
+            })
+    }
+
+    function sendText() {
+        var sendValue = encodeURI(encodeURI(document.getElementById('input').value))
+        console.log("Input Text = " + sendValue)
+        $.ajax({
+            url: "/ios/inputText?value=" + sendValue,
             method: "GET",
 
         })
@@ -399,7 +525,7 @@
 
 
 <script>
-    var WSURL = "ws://"+window.location.host+"/websocket"
+    var WSURL = "ws://" + window.location.host + "/websocket"
     /*jshint browser:true*/
 
     // BackFrame stores the latest frame retrieved from the socket. It does no
@@ -575,7 +701,7 @@
     }
 
     ws.onmessage = function (message) {
-        console.log('got jpeg', arguments)
+//        console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
             type: 'image/jpeg'
         })
