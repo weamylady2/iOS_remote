@@ -2,8 +2,10 @@ com/demo/ios/WebSocketController$1.class
 com/demo/blog/BlogValidator.class
 com/demo/common/model/_JFinalDemoGenerator.class
 com/demo/blog/BlogController.class
+com/demo/ios/FileService.class
 com/demo/blog/BlogInterceptor.class
 com/demo/ios/WebSocketHandler.class
+com/demo/ios/upload$1.class
 com/demo/blog/BlogService.class
 com/demo/ios/WebSocketController.class
 com/demo/ios/HttpClientUtil.class
@@ -11,6 +13,7 @@ com/demo/ios/WebSocketController$2.class
 com/demo/ios/GetAndSendImg.class
 com/demo/ios/Test.class
 com/demo/ios/IosController.class
+com/demo/ios/upload.class
 com/demo/index/IndexController.class
 com/demo/common/model/Blog.class
 com/demo/common/model/base/BaseBlog.class
