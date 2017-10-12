@@ -15,14 +15,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<servlet>
-		<servlet-name>upload</servlet-name>
-		<servlet-class>com.demo.ios.upload</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>upload</servlet-name>
-		<url-pattern>/servlet/upload</url-pattern>
-	</servlet-mapping>
 
 
 </web-app>
