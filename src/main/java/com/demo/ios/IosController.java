@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import com.jfinal.upload.UploadFile;
+import java.util.UUID;
 
 public class IosController extends Controller {
 
@@ -224,6 +226,36 @@ public class IosController extends Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void upload() throws JSONException {
+
+
+        UploadFile uploadFile=this.getFile();
+
+
+        String fileName=uploadFile.getOriginalFileName();
+
+        JSONObject map = new JSONObject();
+        File file=uploadFile.getFile();
+        FileService fs=new FileService();
+        File t=new File("file/"+file.getName());
+        System.out.println("File generated: " + t.getAbsolutePath());
+        try {
+            t.createNewFile();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            map.put("status", false);
+            map.put("msg", "服务器异常！");
+        }
+        fs.fileChannelCopy(file, t);
+        file.delete();
+
+        map.put("status", true);
+        map.put("msg", "上传成功！");
+        this.renderJson(map);
     }
 
 
