@@ -1,7 +1,55 @@
-<center><font color=#000000 size=6 face="黑体">iOS-remote使用指南</font>
-</center></br>
+# iOS-remote使用指南
 
-## <font color=#000000 size=5 face="黑体">1、安装Xcode</font>
+## 简介
+iOS-remote是结合[WebDriverAgent](https://github.com/facebook/WebDriverAgent) 和 [ios-minicap](https://github.com/openstf/ios-minicap) 开源项目做出来的基于JAVA的iOS远程真机控制的项目。
+
+## 平台
+仅限Mac使用
+
+## 特点
+- [x] 启动项目时运行 iproxy
+- [x] 为WDA服务创建http代理
+- [x] 添加缺失的索引页
+- [x] 支持包管理API
+- [x] 支持WDA运行
+- [x] iOS远程真机控制
+- [x] 基于Java开发
+
+## 功能
+- [x] iOS远程真机控制（点击拖拽）
+- [x] HOME键功能
+- [x] iPhone输入框添加文字（中英文--中文还在修复中）
+- [x] 设备信息显示
+- [x] 从本地安装ipa文件到iPhone真机里
+- [x] 卸载已安装APP
+- [x] 截图功能
+
+## 安装要求
+* 用brew安装libjpeg-turbo (要求版本1.5及以上)
+* Xcode (要求版本8及以上,注：9有一定无法使用的风险)
+* [cmake](https://cmake.org/)（最好通过brew安装）
+* OS X Yosemite (要求版本10.9及以上)
+* iOS（要求版本8及以上）
+* [Lightning cable](https://en.wikipedia.org/wiki/Lightning_(connector)). 查看设备列表.
+* 用[Carthage](https://github.com/Carthage/Carthage) 获取所有依赖项
+* 用[npm](https://www.npmjs.com)建立Inspector bundle
+* Eclipse IDE for Java EE Developers
+* JavaSE (要求版本1.6及以上) 
+* Tomcat (要求版本7及以上) 
+* libimobiledevice
+* ideviceinstaller
+* usbmuxd
+
+## 其他帮助文档
+[How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
+[How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
+[WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
+[Eclipse Import Maven Project](http://blog.csdn.net/yxys01/article/details/78111229)</br></br>
+[Configure Tomcat9 In Mac](http://blog.csdn.net/yxys01/article/details/77715330)</br></br>
+
+## 安装
+
+### 1、安装Xcode
 Xcode这个可以去官网安装或者去我的网盘下载Xcode8.3.3.xip
 链接：http://pan.baidu.com/s/1hszRESW 密码：yogw
 
@@ -14,7 +62,7 @@ Xcode这个可以去官网安装或者去我的网盘下载Xcode8.3.3.xip
 详情可见：http://blog.csdn.net/yxys01/article/details/73456973
 
 
-## <font color=#000000 size=5 face="黑体">2、安装Homebrew</font>
+### 2、安装Homebrew
 Homebrew的安装很简单，只需在终端下输入如下指令：
 
 ```
@@ -24,8 +72,8 @@ Homebrew安装成功后，会自动创建目录 /usr/local/Cellar 来存放Homeb
 
 详情可见：http://blog.csdn.net/yxys01/article/details/77452318
 
-## <font color=#000000 size=5 face="黑体">3、安装node和npm
-</font>
+### 3、安装node和npm
+
 直接打开终端输入如下指令：
 
 ```
@@ -33,7 +81,7 @@ brew install node
 ```
 执行完上面的命令，你就安装好了nodejs和npm 
 
-## <font color=#000000 size=5 face="黑体">4、安装相关依赖库</font>
+### 4、安装相关依赖库
 **(1)需要安装 [usbmuxd](https://github.com/libimobiledevice/usbmuxd) 以便于通过 USB 通道测试 iOS 真机，不需要测试真机则不用安装**
 ```
 $ brew install usbmuxd
@@ -51,7 +99,7 @@ sudo brew install libimobiledevice
 sudo brew install ideviceinstaller
 ```
 
-## <font color=#000000 size=5 face="黑体">5、安装ios-minicap</font>
+### 5、安装ios-minicap
 
 **(1)打开终端，clone该项目：**
 
@@ -70,7 +118,7 @@ brew install cmake
 ```
 **(4)启动ios-minicap，详情可见：http://blog.csdn.net/yxys01/article/details/76442135**
 
-## <font color=#000000 size=5 face="黑体">6、安装 WebDriverAgent</font>
+### 6、安装 WebDriverAgent
 
 **(1)打开终端，clone该项目：**
 
@@ -88,7 +136,7 @@ git clone https://github.com/facebook/WebDriverAgent
 http://blog.csdn.net/yxys01/article/details/77045359
 
 
-## <font color=#000000 size=5 face="黑体">7、安装iOS-remote</font>
+### 7、安装iOS-remote
 
 **(1)打开终端，clone该项目：**
 ```
@@ -132,7 +180,7 @@ tval.tv_usec=(secs*1000)%1000000;
 select(0,NULL,NULL,NULL,&tval);
 }
 ```
-然后在main中添加一个sleep
+然后在main中添加`sleep_ms(50);`
 
 ```
 while (gWaiter.isRunning() and gWaiter.waitForFrame() > 0) {
@@ -160,7 +208,7 @@ mkdir: build: File exists
 [100%] Built target ios_minicap
 ```
 
-## <font color=#000000 size=5 face="黑体">8、运行iOS_remote</font>
+### 8、运行iOS_remote
 
 **(1)新建一个终端，打开iproxy** 
 
