@@ -15,7 +15,16 @@ iOS-remote是结合[WebDriverAgent](https://github.com/facebook/WebDriverAgent) 
 - [x] iOS远程真机控制
 - [x] 基于Java开发
 
-## 要求
+## 功能
+- [x] iOS远程真机控制（点击拖拽）
+- [x] HOME键功能
+- [x] iPhone输入框添加文字（中英文--中文还在修复中）
+- [x] 设备信息显示
+- [x] 从本地安装ipa文件到iPhone真机里
+- [x] 卸载已安装APP
+- [x] 截图功能
+
+## 安装要求
 * 用brew安装libjpeg-turbo (要求版本1.5及以上)
 * Xcode (要求版本8及以上,注：9有一定无法使用的风险)
 * [cmake](https://cmake.org/)（最好通过brew安装）
@@ -31,7 +40,7 @@ iOS-remote是结合[WebDriverAgent](https://github.com/facebook/WebDriverAgent) 
 * ideviceinstaller
 * usbmuxd
 
-## Other Help Document
+## 其他帮助文档
 [How to install ios-minicap](http://blog.csdn.net/yxys01/article/details/76442135)</br></br>
 [How to install WebDriverAgent](https://testerhome.com/topics/4904)</br></br>
 [WebDriverAgent Q&A](https://testerhome.com/topics/9666)</br></br>
