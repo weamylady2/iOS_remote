@@ -64,7 +64,7 @@
                     <input id="bundleid" type="text" class="form-control" v-model="inputText"
                            placeholder="请输入bundle id">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="launchApp()">Launch App By BundleId</button>
+              <button class="btn btn-default" type="button" onclick="launchApp()">以BundleId启动App</button>
                         </span>
                 </div>
             </div>
@@ -74,8 +74,8 @@
                            placeholder="Input text ..."
                            @keyup.enter="sendText(inputText+'\n')">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="sendText()">SendText</button>
-              <button class="btn btn-default" type="button" onclick="clearText()">Clear</button>
+              <button class="btn btn-default" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-default" type="button" onclick="clearText()">清空</button>
             </span>
                 </div>
             </div>
@@ -83,15 +83,25 @@
             <div class="form-group">
                 <div class="input-group">
 
-                    <input type="file" name="uploadfile" id="uploadfile" multiple="multiple">
-                    <button id="upload" type="button" onclick="return false;">上传</button>
+                    <input type="file" name="uploadfile" id="uploadfile" >
+                    <button id="upload" type="button" onclick="return false;">上传并安装ipa</button>
 
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                           placeholder="请输入bundle id">
+                    <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="uninstallApp()">以BundleId卸载App</button>
+                        </span>
                 </div>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">设备详情</h3>
             </div>
             <table id="deviceinfo" class="table">
+                <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
                 <tbody>
                 <tr>
                     <td>设备名称：</td>
@@ -158,20 +168,41 @@
             },
         },
         mounted: function () {
-            var self = this;
-            $.ajax({
-                url: "/ios/getDeviceInfo?",
-                method: "GET",
-            })
-                .then(function (ret) {
-                    self.device.udid = ret.udid
-                    self.device.name = ret.name
-                    self.device.apps = ret.apps
-                    console.log(udid)
+            this.refresh();
+
+        },
+        methods: {
+            refresh: function () {
+                console.log("getting device info...");
+                var self = this;
+                $.ajax({
+                    url: "/ios/getDeviceInfo?",
+                    method: "GET",
                 })
+                    .then(function (ret) {
+                        self.device.udid = ret.udid
+                        self.device.name = ret.name
+                        self.device.apps = ret.apps
+                        console.log(udid)
+                    })
+            },
 
         },
     });
+
+    function refreshdetail() {
+        console.log("getting device info...");
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                console.log(udid)
+            })
+    }
 
     function home() {
         $.ajax({
@@ -188,6 +219,19 @@
         if (id != "") {
             $.ajax({
                 url: "/ios/launchapp?id=" + id,
+                method: "GET",
+
+            })
+                .then(function (ret) {
+                    console.log(ret);
+                })
+        }
+    }
+    function uninstallApp() {
+        var id = document.getElementById('uninstallid').value
+        if (id != "") {
+            $.ajax({
+                url: "/ios/uninstall?id=" + id,
                 method: "GET",
 
             })
