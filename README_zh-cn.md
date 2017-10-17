@@ -65,8 +65,8 @@ Xcode这个可以去官网安装或者去我的网盘下载Xcode8.3.3.xip
 ### 2、安装Homebrew
 Homebrew的安装很简单，只需在终端下输入如下指令：
 
-```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```bash
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 Homebrew安装成功后，会自动创建目录 /usr/local/Cellar 来存放Homebrew安装的程序。 这时你在命令行状态下面就可以使用 brew 命令了.
 
@@ -77,7 +77,7 @@ Homebrew安装成功后，会自动创建目录 /usr/local/Cellar 来存放Homeb
 直接打开终端输入如下指令：
 
 ```
-brew install node
+$ brew install node
 ```
 执行完上面的命令，你就安装好了nodejs和npm 
 
@@ -94,9 +94,9 @@ $ brew install carthage
 **(3)安装libimobiledevice 和 ideviceinstaller**
 
 ```
-sudo brew update
-sudo brew install libimobiledevice
-sudo brew install ideviceinstaller
+$ sudo brew update
+$ sudo brew install libimobiledevice
+$ sudo brew install ideviceinstaller
 ```
 
 ### 5、安装ios-minicap
@@ -104,30 +104,38 @@ sudo brew install ideviceinstaller
 **(1)打开终端，clone该项目：**
 
 ```
-$git clone https://github.com/openstf/ios-minicap 
+$ git clone https://github.com/openstf/ios-minicap 
 ```
 **(2)安装libjpeg-turbo**
 
 ```
-brew install libjpeg-turbo 
+$ brew install libjpeg-turbo 
 ```
 **(3)安装cmake**
 
 ```
-brew install cmake
+$ brew install cmake
 ```
-**(4)启动ios-minicap，详情可见：http://blog.csdn.net/yxys01/article/details/76442135**
+**(4)启动ios-minicap**
+
+**详情可见：http://blog.csdn.net/yxys01/article/details/76442135 或者 https://testerhome.com/topics/10456**
 
 ### 6、安装 WebDriverAgent
+
+安装步骤详情可见：https://testerhome.com/topics/10463 </br>
 
 **(1)打开终端，clone该项目：**
 
 ```
-git clone https://github.com/facebook/WebDriverAgent
+$ git clone https://github.com/facebook/WebDriverAgent
 ```
 **(2)运行初始化脚本**
 ```
-./Scripts/bootstrap.sh
+$ cd /Users/yourname/WebDriverAgent
+
+$ mkdir -p Resources/WebDriverAgent.bundle
+
+$ sh ./Scripts/bootstrap.sh
 ```
 该脚本会使用Carthage下载所有的依赖，使用npm打包响应的js文件
 执行完成后，直接双击打开WebDriverAgent.xcodeproj这个文件。
@@ -140,11 +148,11 @@ http://blog.csdn.net/yxys01/article/details/77045359
 
 **(1)打开终端，clone该项目：**
 ```
-$git clone https://github.com/weamylady2/iOS_remote
+$ git clone https://github.com/weamylady2/iOS_remote
 ```
 or
 ```
-$git clone https://github.com/yxys01/iOS_remote
+$ git clone https://github.com/yxys01/iOS_remote
 ```
 **(2)在 Eclipse中打开 iOS_remote**
 
@@ -213,15 +221,30 @@ mkdir: build: File exists
 **(1)新建一个终端，打开iproxy** 
 
 ```
-$iproxy 8200 8100
+$ iproxy 8200 8100
 ```
 **(2)再打开一个终端**
 
 ```
-$cd /Users/yourname/iOS_remote
-$mvn tomcat7:run-war
+$ cd /Users/yourname/iOS_remote
+$ mvn tomcat7:run-war
 ```
 **(3)打开浏览器，输入网址：http://localhost:8080/ios/ 即可**
 
+### iOS-remote 安装篇
 
+[iOS-remote 安装篇之 ios-minicap 安装使用完全指南](https://testerhome.com/topics/10456)
+
+[iOS-remote 安装篇之 WebDriverAgent 安装使用完全指南](https://testerhome.com/topics/10463)
+
+[iOS-remote 安装篇之 iOS-remote安装使用完全指南](https://testerhome.com/topics/10466)
+
+### 参考文献
+iOS-minicap + WDA 实现 ios 远程真机测试  https://testerhome.com/topics/10262
+基于 WebDriverAgent 的 iOS 远程控制  https://testerhome.com/topics/8890
+iOS 远程真机 (仅限屏幕查看)  https://testerhome.com/topics/6470
+WebDriverAgent简介  https://testerhome.com/topics/4904
+iOS 真机如何安装 WebDriverAgent  https://testerhome.com/topics/7220
+WebDriverAgent天坑记  https://testerhome.com/topics/9666
+STF 框架之 minicap 工具  https://testerhome.com/topics/3115
 
