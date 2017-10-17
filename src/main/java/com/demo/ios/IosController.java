@@ -12,10 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import com.jfinal.upload.UploadFile;
 import java.util.UUID;
-import java.io.BufferedReader;  
-import java.io.InputStreamReader;  
-import java.util.ArrayList;  
-import java.util.List;  
 
 public class IosController extends Controller {
 
@@ -233,7 +229,19 @@ public class IosController extends Controller {
     }
 
 
-    public void upload() throws JSONException {
+    public void uninstall() throws JSONException, IOException, InterruptedException {
+
+//        String wdaPort = PropKit.get("wdaPort");
+        String bundleid = getPara("id");
+        System.out.println("uninstalling app id: " + bundleid);
+
+        bash.uninstallApp(bundleid);
+
+        renderText("uninstall finished!");
+    }
+
+
+    public void upload() throws JSONException, IOException, InterruptedException {
 
 
         UploadFile uploadFile=this.getFile();
@@ -243,8 +251,18 @@ public class IosController extends Controller {
 
         JSONObject map = new JSONObject();
         File file=uploadFile.getFile();
+        if(!file.getName().matches(".*\\.ipa$")){
+            map.put("status", false);
+            map.put("msg", "不是ipa文件！");
+            file.delete();
+            this.renderError(501);
+            System.out.println("不是ipa文件！" );
+            return;
+        }
         FileService fs=new FileService();
-        File t=new File("/upload/file/"+file.getName());
+        File t=new File("file/"+file.getName());
+        String filePath = t.getAbsolutePath();
+
         System.out.println("File generated: " + t.getAbsolutePath());
         try {
             t.createNewFile();
@@ -254,39 +272,16 @@ public class IosController extends Controller {
             map.put("status", false);
             map.put("msg", "服务器异常！");
         }
-
-        
-
-        map.put("status", true);
-        map.put("msg", "上传成功！");
-
-        
-        //String command1 = "ideviceinstaller -i "+"/upload/file"+t;
-        String command1 = "ideviceinstaller --udid 0c6c0a77471f5ae76dfdc55b57e0d1502ab92aaa -i /Users/xiatian/Desktop/Flow800.ipa";
-        Process process = null;  
-
-        List<String> processList = new ArrayList<String>(); 
-        
-        try {  
-            process = Runtime.getRuntime().exec(command1);  
-            BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));  
-            String line = "";  
-            while ((line = input.readLine()) != null) {  
-                processList.add(line); 
-            }  
-            input.close();  
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        }  
-        for (String line : processList) {  
-            System.out.println(line);  
-        }  
         fs.fileChannelCopy(file, t);
         file.delete();
 
+        bash.installIpa(filePath);
+//        t.delete();
+        map.put("status", true);
+        map.put("msg", "上传成功！");
         this.renderJson(map);
-    }
 
+    }
 
 
 
