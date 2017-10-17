@@ -66,6 +66,30 @@ public class ExecuteUtil {
         }
     }
 
+    public void installIpa(String ipaPath) throws IOException, InterruptedException {
+
+        System.out.println("installing ipa..." + ipaPath);
+
+        ProcessBuilder pb = new ProcessBuilder("ideviceinstaller", "-i",ipaPath);
+        Process p = pb.start();
+        int exitCode = p.waitFor();
+        String out = getOutputString(p.getInputStream());
+        System.out.println(out.toString());
+
+    }
+
+    public void uninstallApp(String udid) throws IOException, InterruptedException {
+
+        System.out.println("uninstalling app..." + udid);
+
+        ProcessBuilder pb = new ProcessBuilder("ideviceinstaller", "-U",udid);
+        Process p = pb.start();
+        int exitCode = p.waitFor();
+        String out = getOutputString(p.getInputStream());
+        System.out.println(out.toString());
+
+    }
+
 
     public void exitMincap() throws IOException, InterruptedException {
 

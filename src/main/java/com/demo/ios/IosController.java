@@ -229,7 +229,19 @@ public class IosController extends Controller {
     }
 
 
-    public void upload() throws JSONException {
+    public void uninstall() throws JSONException, IOException, InterruptedException {
+
+//        String wdaPort = PropKit.get("wdaPort");
+        String bundleid = getPara("id");
+        System.out.println("uninstalling app id: " + bundleid);
+
+        bash.uninstallApp(bundleid);
+
+        renderText("uninstall finished!");
+    }
+
+
+    public void upload() throws JSONException, IOException, InterruptedException {
 
 
         UploadFile uploadFile=this.getFile();
@@ -239,8 +251,18 @@ public class IosController extends Controller {
 
         JSONObject map = new JSONObject();
         File file=uploadFile.getFile();
+        if(!file.getName().matches(".*\\.ipa$")){
+            map.put("status", false);
+            map.put("msg", "不是ipa文件！");
+            file.delete();
+            this.renderError(501);
+            System.out.println("不是ipa文件！" );
+            return;
+        }
         FileService fs=new FileService();
         File t=new File("file/"+file.getName());
+        String filePath = t.getAbsolutePath();
+
         System.out.println("File generated: " + t.getAbsolutePath());
         try {
             t.createNewFile();
@@ -253,11 +275,13 @@ public class IosController extends Controller {
         fs.fileChannelCopy(file, t);
         file.delete();
 
+        bash.installIpa(filePath);
+//        t.delete();
         map.put("status", true);
         map.put("msg", "上传成功！");
         this.renderJson(map);
-    }
 
+    }
 
 
 
