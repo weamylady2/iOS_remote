@@ -15,6 +15,7 @@
 <script src="/js/canvas2image.js"></script>
 <script src="/js/upload.js"></script>
 <script src="/js/ajaxfileupload.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <body>
 
 <!--<canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>-->
@@ -23,29 +24,32 @@
     <div class="row height100p">
         <div class="col-sm-6 height100p">
             <div class="screen-wraper">
-                <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
-                <span class="finger finger-1"></span>
-                <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
-                <div>
-                    <p>
-                        <button id="save">save screenshot</button>
-                        as:
-                        <select id="sel">
-                            <option value="png">png</option>
-                            <option value="jpeg">jpeg</option>
-                            <option value="bmp">bmp</option>
-                        </select><br/>
-                        width : <input type="number" value="375" id="imgW"/><br/>
-                        height : <input type="number" value="667" id="imgH"/>
-                        fileName: <input type="text" placeholder="optional" id="imgFileName">
-                    </p>
-
+                <div style="text-align:center" class="form-group">
+                    <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
+                    <span class="finger finger-1"></span>
+                    <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
+                    <div style="text-align:center" class="form-group">
+                        <button class="btn btn-default" onclick="home()">
+                            <span class="glyphicon glyphicon-home"></span> Home
+                        </button>
+                    </div>
                 </div>
             </div>
+            <div>
+                <p>
+                    <button id="save">保存截图</button>
+                    格式:
+                    <select id="sel">
+                        <option value="png">png</option>
+                        <option value="jpeg">jpeg</option>
+                        <option value="bmp">bmp</option>
+                    </select><br/>
+                    (可选)截图文件名: <input type="text" placeholder="optional" id="imgFileName">
+                </p>
+
+            </div>
         </div>
-        <div class="col-sm-6 ">
-            获取截图请直接对屏幕右键另存为
-        </div>
+
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
             <br/>
@@ -53,18 +57,14 @@
         </div>
         <div class="col-sm-6">
             <hr>
-            <div class="form-group">
-                <button class="btn btn-default" onclick="home()">
-                    <span class="glyphicon glyphicon-home"></span> Home
-                </button>
-            </div>
+
             <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
             <div class="form-group">
                 <div class="input-group">
                     <input id="bundleid" type="text" class="form-control" v-model="inputText"
                            placeholder="请输入bundle id">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="launchApp()">Launch App By BundleId</button>
+              <button class="btn btn-default" type="button" onclick="launchApp()">以BundleId启动App</button>
                         </span>
                 </div>
             </div>
@@ -74,8 +74,8 @@
                            placeholder="Input text ..."
                            @keyup.enter="sendText(inputText+'\n')">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="sendText()">SendText</button>
-              <button class="btn btn-default" type="button" onclick="clearText()">Clear</button>
+              <button class="btn btn-default" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-default" type="button" onclick="clearText()">清空</button>
             </span>
                 </div>
             </div>
@@ -83,24 +83,24 @@
             <div class="form-group">
                 <div class="input-group">
 
-                    <!--<iframe style="display: none" name="top"></iframe>-->
-                    <!--&lt;!&ndash; <form enctype="multipart/form-data" action="/ios/upload" method="post" target="top" class="form-inline" >&ndash;&gt;-->
-                    <!--<form enctype="multipart/form-data" action="/ios/upload" method="post" target="top"-->
-                          <!--class="form-inline">-->
+                    <input type="file" name="uploadfile" id="uploadfile">
+                    <button id="upload" type="button" onclick="return false;">上传并安装ipa</button>
 
-                        <!--<input type="file" name="uploadfile"/>-->
-                        <!--<input type="hidden" name="token" value="{...{.}...}"/>-->
-                        <!--<input type="submit" value="upload"/>-->
-                    <!--</form>-->
-
-                    <input type="file" name="uploadfile" id="uploadfile" multiple="multiple">
-                    <button id="upload" type="button" onclick="return false;">上传</button>
-
+                </div>
+            </div>
+            <div class="form-group">
+                < class="input-group">
+                    <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                           placeholder="请输入bundle id">
+                    <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="uninstallApp()">以BundleId卸载App</button>
+                        </span>
                 </div>
             </div>
             <div class="panel-heading">
                 <h3 class="panel-title">设备详情</h3>
             </div>
+            <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
             <table id="deviceinfo" class="table">
                 <tbody>
                 <tr>
@@ -117,7 +117,10 @@
                 </tr>
 
                 </tbody>
+
             </table>
+
+
         </div>
 
 
@@ -126,12 +129,12 @@
 </div>
 
 </body>
+
 <script>
     var canvas, ctx,
         $save,
         $imgW, $imgH,
         $sel;
-
     function init() {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
@@ -142,22 +145,18 @@
         $imgFileName = document.getElementById('imgFileName');
         bind();
     }
-
     function bind() {
         $save.onclick = function (e) {
             var type = $sel.value,
-                w = $imgW.value,
-                h = $imgH.value;
+                w = 375,
+                h = 667;
             f = $imgFileName.value;
             Canvas2Image.saveAsImage(canvas, w, h, type, f);
         }
-
     }
-
     onload = init;
 </script>
 <script>
-
     var deviceDetail = new Vue({
         el: "#deviceinfo",
         data: {
@@ -168,21 +167,38 @@
             },
         },
         mounted: function () {
-            var self = this;
-            $.ajax({
-                url: "/ios/getDeviceInfo?",
-                method: "GET",
-            })
-                .then(function (ret) {
-                    self.device.udid = ret.udid
-                    self.device.name = ret.name
-                    self.device.apps = ret.apps
-                    console.log(udid)
+            this.refresh();
+        },
+        methods: {
+            refresh: function () {
+                console.log("getting device info...");
+                var self = this;
+                $.ajax({
+                    url: "/ios/getDeviceInfo?",
+                    method: "GET",
                 })
-
+                    .then(function (ret) {
+                        self.device.udid = ret.udid
+                        self.device.name = ret.name
+                        self.device.apps = ret.apps
+                        console.log(udid)
+                    })
+            },
         },
     });
-
+    function refreshdetail() {
+        console.log("getting device info...");
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                console.log(udid)
+            })
+    }
     function home() {
         $.ajax({
             url: "/ios/home",
@@ -192,21 +208,30 @@
                 console.log(ret);
             })
     }
-
     function launchApp() {
         var id = document.getElementById('bundleid').value
         if (id != "") {
             $.ajax({
                 url: "/ios/launchapp?id=" + id,
                 method: "GET",
-
             })
                 .then(function (ret) {
                     console.log(ret);
                 })
         }
     }
-
+    function uninstallApp() {
+        var id = document.getElementById('uninstallid').value
+        if (id != "") {
+            $.ajax({
+                url: "/ios/uninstall?id=" + id,
+                method: "GET",
+            })
+                .then(function (ret) {
+                    console.log(ret);
+                })
+        }
+    }
     function getDeviceInfo() {
         var udid = "";
         $.ajax({
@@ -218,20 +243,17 @@
                 console.log(udid)
             })
     }
-
     function sendText() {
         var sendValue = encodeURI(encodeURI(document.getElementById('input').value))
         console.log("Input Text = " + sendValue)
         $.ajax({
             url: "/ios/inputText?value=" + sendValue,
             method: "GET",
-
         })
             .then(function (ret) {
                 console.log(ret);
             })
     }
-
     function clearText() {
         $.ajax({
             url: "/ios/clear",
@@ -241,7 +263,6 @@
                 console.log(ret);
             })
     }
-
 </script>
 
 
@@ -273,14 +294,11 @@
                 name: "20170603-test",
             }]
         },
-
-
         filters: {
             formatDuration: function (value) {
                 function pad2(number) {
                     return (number < 10 ? '0' : '') + number
                 }
-
                 var totalSeconds = Math.floor(value / 1000); //"00:00:00"
                 var mms = value % 1000;
                 var ms = totalSeconds % 60;
@@ -290,7 +308,6 @@
         },
         mounted: function () {
             var self = this;
-
             this.initTouchListener();
             this.initScreenSize();
             var self = this;
@@ -306,7 +323,6 @@
             }.bind(this);
         },
         methods: {
-
             tap: function (x, y) {
                 var self = this;
                 return $.ajax({
@@ -356,17 +372,14 @@
                 return $.ajax({
                     url: "/ios/inputText?value=" + inputText,
                     method: "GET",
-
                 })
                     .then(function (ret) {
                         console.log(ret);
                     })
             },
-
             clearText: function (n) {
                 this.sendText("\b".repeat(n || 30))
             },
-
             initScreenSize: function () {
 //                $.ajax({
 //                    url: "/ios/status",
@@ -393,25 +406,21 @@
                     beginTime: null,
                 }
                 var _longClickTimeout = 800;
-
                 function calculateBounds() {
                     var el = element;
                     screen.bounds.w = el.offsetWidth
                     screen.bounds.h = el.offsetHeight
                     screen.bounds.x = 0
                     screen.bounds.y = 0
-
                     while (el.offsetParent) {
                         screen.bounds.x += el.offsetLeft
                         screen.bounds.y += el.offsetTop
                         el = el.offsetParent
                     }
                 }
-
                 function deactiveFinger(index) {
                     $(".finger-" + index).removeClass("active").removeClass("longClick")
                 }
-
                 function convertPosition(event) {
                     var e = event;
                     if (e.originalEvent) {
@@ -426,7 +435,6 @@
                     console.log("page x: " + e.pageX + ", page y: " + e.pageY)
                     var x = e.pageX - screen.bounds.x - 30
                     var y = e.pageY - screen.bounds.y
-
                     return {
                         e: e,
                         x: Math.floor(x / (element.clientWidth - 60) * self.display.width),
@@ -435,19 +443,15 @@
                         pageY: y,
                     }
                 }
-
                 function stopMousing() {
                     element.removeEventListener('mousemove', mouseMoveListener);
                     document.removeEventListener('mouseup', mouseUpListener);
                 }
-
                 function mouseUpListener(event) {
                     var p = convertPosition(event);
                     stopMousing()
-
                     var first = screen.firstPosition,
                         second = screen.secondPosition;
-
                     screen.secondPosition = {};
                     element.style.cursor = 'not-allowed'
                     clearTimeout(screen.longClickKey);
@@ -472,7 +476,6 @@
                         element.style.cursor = 'auto'
                     })
                 }
-
                 function mouseMoveListener(event) {
                     var p = convertPosition(event);
                     var first = screen.firstPosition;
@@ -491,7 +494,6 @@
                         screen.secondPosition = {};
                     }
                 }
-
                 function mouseDownListener(event) {
                     if (element.style.cursor == 'not-allowed') {
                         return;
@@ -501,21 +503,17 @@
                     $(".finger-" + index)
                         .addClass("active")
                         .css("transform", 'translate3d(' + p.pageX + 'px,' + p.pageY + 'px,0)')
-
                     screen.longClickKey = setTimeout(function () {
                         $(".finger-0").addClass("longClick");
                     }, _longClickTimeout)
-
                     screen.beginTime = new Date().getTime();
                     screen.firstPosition = {
                         x: p.x,
                         y: p.y
                     }
-
                     element.addEventListener('mousemove', mouseMoveListener);
                     document.addEventListener('mouseup', mouseUpListener);
                 }
-
                 element.addEventListener("mousedown", mouseDownListener);
             }
         }
@@ -526,27 +524,22 @@
 <script>
     var WSURL = "ws://" + window.location.host + "/websocket"
     /*jshint browser:true*/
-
     // BackFrame stores the latest frame retrieved from the socket. It does no
     // other work and can be swapped at any time.
     function BackFrame() {
         this.blob = null
     }
-
     BackFrame.prototype.swap = function (blob) {
         this.blob = blob
     }
-
     BackFrame.prototype.consume = function () {
         var blob = this.blob
         this.blob = null
         return blob
     }
-
     BackFrame.prototype.destroy = function () {
         this.consume()
     }
-
     // FrontFrame takes a blob from the BackFrame and loads it into an image.
     // There are two FrontFrames. One is always loading the next image and one
     // is always being used to render the latest fully loaded image. They're
@@ -559,29 +552,24 @@
         this.loading = false
         this.loaded = false
         this.fresh = false
-
         this.onLoad = function () {
             this.loading = false
             this.loaded = true
             this.fresh = true
         }.bind(this)
-
         this.onError = function () {
             this.loading = false
             this.loaded = false
         }.bind(this)
     }
-
     FrontFrame.prototype.load = function (blob) {
         // If someone's calling load() they're already sure that they don't need
         // the the current frame anymore.
         this.reset()
-
         // Convenience check that must come after the reset.
         if (!blob) {
             return
         }
-
         this.blob = blob
         this.url = URL.createObjectURL(this.blob)
         this.loading = true
@@ -591,7 +579,6 @@
         this.image.onerror = this.onError
         this.image.src = this.url
     }
-
     FrontFrame.prototype.reset = function () {
         this.loading = false
         this.loaded = false
@@ -601,37 +588,30 @@
             this.url = null
         }
     }
-
     FrontFrame.prototype.consume = function () {
         if (!this.fresh) {
             return null
         }
-
         this.fresh = false
         return this
     }
-
     FrontFrame.prototype.destroy = function () {
         this.reset()
         this.image = null
     }
-
     function Pipeline() {
         this.back = new BackFrame()
         this.mid = new FrontFrame('mid')
         this.front = new FrontFrame('front')
     }
-
     Pipeline.prototype.push = function (blob) {
         this.back.swap(blob)
-
         // If the mid frame isn't loading or waiting to be consumed, let's
         // ask it to load this new frame to speed up things.
         if (!this.mid.loading && !this.mid.loaded) {
             this.mid.load(this.back.consume())
         }
     }
-
     Pipeline.prototype.consume = function () {
         if (this.mid.loaded) {
             const mid = this.mid
@@ -641,16 +621,13 @@
         } else if (!this.mid.loading) {
             this.mid.load(this.back.consume())
         }
-
         return this.front.consume()
     }
-
     Pipeline.prototype.destroy = function () {
         this.back.destroy()
         this.mid.destroy()
         this.front.destroy()
     }
-
     // RenderLoop consumes and renders the pipeline.
     function RenderLoop(pipeline, canvas) {
         this.timer = null
@@ -658,20 +635,16 @@
         this.canvas = canvas
         this.g = canvas.getContext('2d')
     }
-
     RenderLoop.prototype.start = function () {
         this.stop()
         this.next()
     }
-
     RenderLoop.prototype.stop = function () {
         cancelAnimationFrame(this.timer)
     }
-
     RenderLoop.prototype.next = function () {
         this.timer = requestAnimationFrame(this.run.bind(this))
     }
-
     RenderLoop.prototype.run = function () {
         var frame = this.pipeline.consume()
         if (frame) {
@@ -681,24 +654,19 @@
         }
         this.next()
     }
-
     var pipeline = new Pipeline()
     var canvas = document.getElementById('screen')
     var renderLoop = new RenderLoop(pipeline, canvas)
-
     var ws = new WebSocket(WSURL)
     ws.binaryType = 'blob'
-
     ws.onclose = function () {
         console.log('onclose', arguments)
         renderLoop.stop()
     }
-
     ws.onerror = function () {
         console.log('onerror', arguments)
         renderLoop.stop()
     }
-
     ws.onmessage = function (message) {
 //        console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
@@ -706,13 +674,11 @@
         })
         pipeline.push(blob)
     }
-
     ws.onopen = function () {
         console.log('onopen', arguments)
         ws.send('1920x1080/0')
         renderLoop.start()
     }
-
 </script>
 
 

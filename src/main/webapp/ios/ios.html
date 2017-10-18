@@ -15,6 +15,7 @@
 <script src="/js/canvas2image.js"></script>
 <script src="/js/upload.js"></script>
 <script src="/js/ajaxfileupload.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <body>
 
 <!--<canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>-->
@@ -23,29 +24,32 @@
     <div class="row height100p">
         <div class="col-sm-6 height100p">
             <div class="screen-wraper">
-                <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
-                <span class="finger finger-1"></span>
-                <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
-                <div>
-                    <p>
-                        <button id="save">save screenshot</button>
-                        as:
-                        <select id="sel">
-                            <option value="png">png</option>
-                            <option value="jpeg">jpeg</option>
-                            <option value="bmp">bmp</option>
-                        </select><br/>
-                        width : <input type="number" value="375" id="imgW"/><br/>
-                        height : <input type="number" value="667" id="imgH"/>
-                        fileName: <input type="text" placeholder="optional" id="imgFileName">
-                    </p>
-
+                <div style="text-align:center" class="form-group">
+                    <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
+                    <span class="finger finger-1"></span>
+                    <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
+                    <div style="text-align:center" class="form-group">
+                        <button class="btn btn-default" onclick="home()">
+                            <span class="glyphicon glyphicon-home"></span> Home
+                        </button>
+                    </div>
                 </div>
             </div>
+            <div>
+                <p>
+                    <button id="save">保存截图</button>
+                    格式:
+                    <select id="sel">
+                        <option value="png">png</option>
+                        <option value="jpeg">jpeg</option>
+                        <option value="bmp">bmp</option>
+                    </select><br/>
+                    (可选)截图文件名: <input type="text" placeholder="optional" id="imgFileName">
+                </p>
+
+            </div>
         </div>
-        <div class="col-sm-6 ">
-            获取截图请直接对屏幕右键另存为
-        </div>
+
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
             <br/>
@@ -53,11 +57,7 @@
         </div>
         <div class="col-sm-6">
             <hr>
-            <div class="form-group">
-                <button class="btn btn-default" onclick="home()">
-                    <span class="glyphicon glyphicon-home"></span> Home
-                </button>
-            </div>
+
             <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
             <div class="form-group">
                 <div class="input-group">
@@ -83,13 +83,13 @@
             <div class="form-group">
                 <div class="input-group">
 
-                    <input type="file" name="uploadfile" id="uploadfile" >
+                    <input type="file" name="uploadfile" id="uploadfile">
                     <button id="upload" type="button" onclick="return false;">上传并安装ipa</button>
 
                 </div>
             </div>
             <div class="form-group">
-                <div class="input-group">
+                < class="input-group">
                     <input id="uninstallid" type="text" class="form-control" v-model="inputText"
                            placeholder="请输入bundle id">
                     <span class="input-group-btn">
@@ -100,8 +100,8 @@
             <div class="panel-heading">
                 <h3 class="panel-title">设备详情</h3>
             </div>
+            <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
             <table id="deviceinfo" class="table">
-                <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
                 <tbody>
                 <tr>
                     <td>设备名称：</td>
@@ -117,7 +117,10 @@
                 </tr>
 
                 </tbody>
+
             </table>
+
+
         </div>
 
 
@@ -126,6 +129,7 @@
 </div>
 
 </body>
+
 <script>
     var canvas, ctx,
         $save,
@@ -144,8 +148,8 @@
     function bind() {
         $save.onclick = function (e) {
             var type = $sel.value,
-                w = $imgW.value,
-                h = $imgH.value;
+                w = 375,
+                h = 667;
             f = $imgFileName.value;
             Canvas2Image.saveAsImage(canvas, w, h, type, f);
         }
