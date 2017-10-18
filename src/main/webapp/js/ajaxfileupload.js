@@ -153,7 +153,7 @@ jQuery.extend({
                 jQuery(io).unbind()
 
                 setTimeout(function()
-                {   try
+                {	try
                     {
                         $(io).remove();
                         $(form).remove();
@@ -234,3 +234,4 @@ jQuery.extend({
         return data;
     }
 })
+
