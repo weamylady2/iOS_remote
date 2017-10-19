@@ -410,13 +410,13 @@ public class WebSocketController {
 //                            System.out.println(String.format("实际图片的大小 : %d",
 //                                    frameBody.length));
 //                            if (finalBytes == null) {
-                                finalBytes = subByteArray(frameBody, 0,
-                                        frameBody.length);
+                            finalBytes = subByteArray(frameBody, 0,
+                                    frameBody.length);
 //                                System.out.println(String.format("实际图片的大小 : %d",
 //                                        frameBody.length));
-                                finalBytes = subByteArray(frameBody, 0,
-                                        frameBody.length);
-                                ready = true;
+                            finalBytes = subByteArray(frameBody, 0,
+                                    frameBody.length);
+                            ready = true;
 //                            }
                             cursor += frameBodyLength;
                             frameBodyLength = 0;
