@@ -100,7 +100,9 @@
                 <h3 class="panel-title">设备详情</h3>
             </div>
             <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
+
             <table id="deviceinfo" class="table">
+                <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
                 <tbody>
                 <tr>
                     <td>设备名称：</td>
@@ -114,7 +116,11 @@
                     <td>已安装的App：</td>
                     <td id="apps" v-html="device.apps"></td>
                 </tr>
+                <tr>
 
+                    <td>日志：</td>
+                    <td id="logs" v-html="device.logs"></td>
+                </tr>
                 </tbody>
 
             </table>
@@ -161,6 +167,8 @@
     onload = init;
 </script>
 <script>
+    var WSURL2 = "ws://" + window.location.host + "/websocket2"
+    var ws2 = null;
 
     var deviceDetail = new Vue({
         el: "#deviceinfo",
@@ -169,6 +177,7 @@
                 name: '',
                 udid: '',
                 apps: '',
+                logs: '',
             },
         },
         mounted: function () {
@@ -194,6 +203,8 @@
         },
     });
 
+
+
     function refreshdetail() {
         console.log("getting device info...");
         $.ajax({
@@ -206,6 +217,40 @@
                 deviceDetail.device.apps = ret.apps
                 console.log(udid)
             })
+    }
+
+    function refreshlogs() {
+
+        if(document.getElementById('getlogbtn').textContent == "开始"){
+            deviceDetail.device.logs = "";
+            console.log("开始抓取日志...");
+            ws2 = new WebSocket(WSURL2)
+
+            ws2.onclose = function () {
+                console.log('ws2 onclose', arguments)
+            }
+
+            ws2.onerror = function () {
+                console.log('ws2 onerror', arguments)
+            }
+
+            ws2.onmessage = function (message) {
+                deviceDetail.device.logs += message.data
+                console.log('msg got:' + message.data)
+            }
+            ws2.onopen = function () {
+                console.log('ws2 onopen', arguments)
+
+            }
+            document.getElementById('getlogbtn').textContent = "停止"
+            deviceDetail.device.getlog = "停止"
+        }else{
+            ws2.close();
+            console.log("停止抓取日志...");
+            document.getElementById('getlogbtn').textContent = "开始"
+        }
+
+
     }
 
     function home() {

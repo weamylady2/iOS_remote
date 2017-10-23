@@ -15,6 +15,7 @@
 <script src="/js/canvas2image.js"></script>
 <script src="/js/upload.js"></script>
 <script src="/js/ajaxfileupload.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <body>
 
 <!--<canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>-->
@@ -23,29 +24,32 @@
     <div class="row height100p">
         <div class="col-sm-6 height100p">
             <div class="screen-wraper">
-                <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
-                <span class="finger finger-1"></span>
-                <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
-                <div>
-                    <p>
-                        <button id="save">save screenshot</button>
-                        as:
-                        <select id="sel">
-                            <option value="png">png</option>
-                            <option value="jpeg">jpeg</option>
-                            <option value="bmp">bmp</option>
-                        </select><br/>
-                        width : <input type="number" value="375" id="imgW"/><br/>
-                        height : <input type="number" value="667" id="imgH"/>
-                        fileName: <input type="text" placeholder="optional" id="imgFileName">
-                    </p>
-
+                <div style="text-align:center" class="form-group">
+                    <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
+                    <span class="finger finger-1"></span>
+                    <canvas id="screen" style="border: 1px solid #ac7fff;"></canvas>
+                    <div style="text-align:center" class="form-group">
+                        <button class="btn btn-default" onclick="home()">
+                            <span class="glyphicon glyphicon-home"></span> Home
+                        </button>
+                    </div>
                 </div>
             </div>
+            <div>
+                <p>
+                    <button id="save">保存截图</button>
+                    格式:
+                    <select id="sel">
+                        <option value="png">png</option>
+                        <option value="jpeg">jpeg</option>
+                        <option value="bmp">bmp</option>
+                    </select><br/>
+                    (可选)截图文件名: <input type="text" placeholder="optional" id="imgFileName">
+                </p>
+
+            </div>
         </div>
-        <div class="col-sm-6 ">
-            获取截图请直接对屏幕右键另存为
-        </div>
+
         <div class="col-sm-6 ">
             打开页面之后需要约20秒时间启动后台WDA程序之后才能显示手机页面进行使用，
             <br/>
@@ -53,18 +57,14 @@
         </div>
         <div class="col-sm-6">
             <hr>
-            <div class="form-group">
-                <button class="btn btn-default" onclick="home()">
-                    <span class="glyphicon glyphicon-home"></span> Home
-                </button>
-            </div>
+
             <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
             <div class="form-group">
                 <div class="input-group">
                     <input id="bundleid" type="text" class="form-control" v-model="inputText"
                            placeholder="请输入bundle id">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="launchApp()">Launch App By BundleId</button>
+              <button class="btn btn-default" type="button" onclick="launchApp()">以BundleId启动App</button>
                         </span>
                 </div>
             </div>
@@ -74,8 +74,8 @@
                            placeholder="Input text ..."
                            @keyup.enter="sendText(inputText+'\n')">
                     <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="sendText()">SendText</button>
-              <button class="btn btn-default" type="button" onclick="clearText()">Clear</button>
+              <button class="btn btn-default" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-default" type="button" onclick="clearText()">清空</button>
             </span>
                 </div>
             </div>
@@ -83,15 +83,26 @@
             <div class="form-group">
                 <div class="input-group">
 
-                    <input type="file" name="uploadfile" id="uploadfile" multiple="multiple">
-                    <button id="upload" type="button" onclick="return false;">上传</button>
+                    <input type="file" name="uploadfile" id="uploadfile">
+                    <button id="upload" type="button" onclick="return false;">上传并安装ipa</button>
 
                 </div>
             </div>
+            <div class="form-group">
+                <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                       placeholder="请输入bundle id">
+                <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="uninstallApp()">以BundleId卸载App</button>
+                        </span>
+            </div>
+
             <div class="panel-heading">
                 <h3 class="panel-title">设备详情</h3>
             </div>
+            <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
+
             <table id="deviceinfo" class="table">
+                <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
                 <tbody>
                 <tr>
                     <td>设备名称：</td>
@@ -103,11 +114,18 @@
                 </tr>
                 <tr>
                     <td>已安装的App：</td>
-                    <td id="apps"> {{device.apps}}</td>
+                    <td id="apps" v-html="device.apps"></td>
                 </tr>
+                <tr>
 
+                    <td>日志：</td>
+                    <td id="logs" v-html="device.logs"></td>
+                </tr>
                 </tbody>
+
             </table>
+
+
         </div>
 
 
@@ -116,7 +134,9 @@
 </div>
 
 </body>
+
 <script>
+
     var canvas, ctx,
         $save,
         $imgW, $imgH,
@@ -136,8 +156,8 @@
     function bind() {
         $save.onclick = function (e) {
             var type = $sel.value,
-                w = $imgW.value,
-                h = $imgH.value;
+                w = 375,
+                h = 667;
             f = $imgFileName.value;
             Canvas2Image.saveAsImage(canvas, w, h, type, f);
         }
@@ -147,6 +167,8 @@
     onload = init;
 </script>
 <script>
+    var WSURL2 = "ws://" + window.location.host + "/websocket2"
+    var ws2 = null;
 
     var deviceDetail = new Vue({
         el: "#deviceinfo",
@@ -155,23 +177,81 @@
                 name: '',
                 udid: '',
                 apps: '',
+                logs: '',
             },
         },
         mounted: function () {
-            var self = this;
-            $.ajax({
-                url: "/ios/getDeviceInfo?",
-                method: "GET",
-            })
-                .then(function (ret) {
-                    self.device.udid = ret.udid
-                    self.device.name = ret.name
-                    self.device.apps = ret.apps
-                    console.log(udid)
+            this.refresh();
+
+        },
+        methods: {
+            refresh: function () {
+                console.log("getting device info...");
+                var self = this;
+                $.ajax({
+                    url: "/ios/getDeviceInfo?",
+                    method: "GET",
                 })
+                    .then(function (ret) {
+                        self.device.udid = ret.udid
+                        self.device.name = ret.name
+                        self.device.apps = ret.apps
+                        console.log(udid)
+                    })
+            },
 
         },
     });
+
+
+
+    function refreshdetail() {
+        console.log("getting device info...");
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                console.log(udid)
+            })
+    }
+
+    function refreshlogs() {
+
+        if(document.getElementById('getlogbtn').textContent == "开始"){
+            deviceDetail.device.logs = "";
+            console.log("开始抓取日志...");
+            ws2 = new WebSocket(WSURL2)
+
+            ws2.onclose = function () {
+                console.log('ws2 onclose', arguments)
+            }
+
+            ws2.onerror = function () {
+                console.log('ws2 onerror', arguments)
+            }
+
+            ws2.onmessage = function (message) {
+                deviceDetail.device.logs += message.data
+                console.log('msg got:' + message.data)
+            }
+            ws2.onopen = function () {
+                console.log('ws2 onopen', arguments)
+
+            }
+            document.getElementById('getlogbtn').textContent = "停止"
+            deviceDetail.device.getlog = "停止"
+        }else{
+            ws2.close();
+            console.log("停止抓取日志...");
+            document.getElementById('getlogbtn').textContent = "开始"
+        }
+
+
+    }
 
     function home() {
         $.ajax({
@@ -188,6 +268,20 @@
         if (id != "") {
             $.ajax({
                 url: "/ios/launchapp?id=" + id,
+                method: "GET",
+
+            })
+                .then(function (ret) {
+                    console.log(ret);
+                })
+        }
+    }
+
+    function uninstallApp() {
+        var id = document.getElementById('uninstallid').value
+        if (id != "") {
+            $.ajax({
+                url: "/ios/uninstall?id=" + id,
                 method: "GET",
 
             })
