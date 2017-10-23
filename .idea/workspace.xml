@@ -1,36 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="477ad9f1-0e6d-42c9-aac6-c7d3e382afe5" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/upload$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/upload.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/upload/1507773118740.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/tomcat/logs/access_log.2017-10-12" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/demo/common/DemoConfig.class" afterPath="$PROJECT_DIR$/target/classes/com/demo/common/DemoConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/demo/ios/ExecuteUtil.class" afterPath="$PROJECT_DIR$/target/classes/com/demo/ios/ExecuteUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/demo/ios/IosController.class" afterPath="$PROJECT_DIR$/target/classes/com/demo/ios/IosController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven.war" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven.war" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/common/DemoConfig.class" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/common/DemoConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/ExecuteUtil.class" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/ExecuteUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/IosController.class" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/com/demo/ios/IosController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jfinal_demo_for_maven.log" afterPath="$PROJECT_DIR$/jfinal_demo_for_maven.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/config.properties" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/execWDA.sh" afterPath="$PROJECT_DIR$/src/main/resources/execWDA.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/ios/ios.html" afterPath="$PROJECT_DIR$/src/main/webapp/ios/ios.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/config.properties" afterPath="$PROJECT_DIR$/target/classes/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/execWDA.sh" afterPath="$PROJECT_DIR$/target/classes/execWDA.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/config.properties" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/config.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/execWDA.sh" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/classes/execWDA.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/WEB-INF/web.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/ios/ios.html" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/ios/ios.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/js/ajaxfileupload.js" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/js/ajaxfileupload.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/jfinal_demo_for_maven/js/upload.js" afterPath="$PROJECT_DIR$/target/jfinal_demo_for_maven/js/upload.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" />
-    </list>
+    <list default="true" id="477ad9f1-0e6d-42c9-aac6-c7d3e382afe5" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
