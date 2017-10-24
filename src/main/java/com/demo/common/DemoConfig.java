@@ -108,7 +108,7 @@ public class DemoConfig extends JFinalConfig {
 	 */
 	public void configHandler(Handlers me) {
 		me.add(new WebSocketHandler("^/websocket"));
-
+		me.add(new WebSocketHandler("^/websocket2"));
 
 	}
 

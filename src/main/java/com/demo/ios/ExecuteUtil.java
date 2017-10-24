@@ -115,8 +115,30 @@ public class ExecuteUtil {
         ProcessBuilder pb = new ProcessBuilder("ideviceinstaller", "-l");
         Process p = pb.start();
         p.waitFor();
-        String out = getOutputString(p.getInputStream());
-        out.replaceAll("\n", "<br />");
+        InputStream ips = p.getInputStream();
+//        String out = getOutputString(p.getInputStream());
+
+        String out = "";
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(ips));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+//                out.println(line);
+                out +=line;
+                out +="<br />";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                ips.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(out);
         return out;
     }
 
@@ -201,7 +223,7 @@ public class ExecuteUtil {
     }
 
     // 读取输入流
-    private static String getOutputString(InputStream inputStream) {
+    public static String getOutputString(InputStream inputStream) {
         String s = "";
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -210,6 +232,7 @@ public class ExecuteUtil {
             while ((line = reader.readLine()) != null) {
 //                out.println(line);
                 s +=line;
+                s +="\r\n";
             }
         } catch (IOException e) {
             e.printStackTrace();
