@@ -1,0 +1,17 @@
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:33:32 +0800] "GET /ios/ HTTP/1.1" 200 24421 http-bio-8080-exec-1 183
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:33:32 +0800] "GET /js/ajaxfileupload.js HTTP/1.1" 304 - http-bio-8080-exec-3 3
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:33:32 +0800] "GET /js/upload.js HTTP/1.1" 304 - http-bio-8080-exec-2 7
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:33:32 +0800] "GET /websocket HTTP/1.1" 101 - http-bio-8080-exec-6 15
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:33:35 +0800] "GET /ios/getDeviceInfo? HTTP/1.1" 200 634 http-bio-8080-exec-5 2539
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:35:44 +0800] "POST /ios/upload HTTP/1.1" 200 12 http-bio-8080-exec-8 2177
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:35:55 +0800] "GET /ios/swipe?fromX=337&fromY=367&toX=86&toY=359&duration=0.2 HTTP/1.1" 200 105 http-bio-8080-exec-9 4949
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:01 +0800] "GET /ios/tapHold?x=236&y=229&duration=1.635 HTTP/1.1" 200 105 http-bio-8080-exec-10 3726
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:04 +0800] "GET /ios/tap/?x=198&y=203 HTTP/1.1" 200 105 http-bio-8080-exec-10 2759
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:12 +0800] "GET /ios/tap/?x=260&y=387 HTTP/1.1" 200 105 http-bio-8080-exec-10 6776
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:21 +0800] "GET /ios/tap/?x=202&y=206 HTTP/1.1" 200 105 http-bio-8080-exec-10 2616
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:28 +0800] "GET /ios/tap/?x=318&y=223 HTTP/1.1" 200 105 http-bio-8080-exec-10 6532
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:30 +0800] "GET /ios/home HTTP/1.1" 200 105 http-bio-8080-exec-4 3612
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:36:31 +0800] "GET /ios/home HTTP/1.1" 200 105 http-bio-8080-exec-8 1517
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:57:39 +0800] "GET /ios/ HTTP/1.1" 200 24421 http-bio-8080-exec-1 772
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:57:39 +0800] "GET /websocket HTTP/1.1" 101 - http-bio-8080-exec-3 22
+0:0:0:0:0:0:0:1 - - [20/Oct/2017:08:57:42 +0800] "GET /ios/getDeviceInfo? HTTP/1.1" 200 666 http-bio-8080-exec-2 2511

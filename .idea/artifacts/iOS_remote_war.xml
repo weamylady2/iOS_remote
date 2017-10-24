@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="iOS_remote:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="jfinal_demo_for_maven.war">
+      <element id="artifact" artifact-name="iOS_remote:war exploded" />
+    </root>
+  </artifact>
+</component>

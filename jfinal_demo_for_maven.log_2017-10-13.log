@@ -1,0 +1,30 @@
+
+2017-10-13 17:26:45
+[ERROR]-[Thread: http-bio-8080-exec-1]-[com.jfinal.core.ActionHandler.handle()]: /ios/tap/?x=101&y=621
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : /Users/waterhuang/workspace/iOS_remot_github/iOS_remote/target/jfinal_demo_for_maven/ios/WDA is no running!
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.demo.ios.WebSocketHandler.handle(WebSocketHandler.java:25)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:73)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:222)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:123)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:502)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:171)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:100)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:953)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:408)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1041)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:603)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:312)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.RuntimeException: File not found : /Users/waterhuang/workspace/iOS_remot_github/iOS_remote/target/jfinal_demo_for_maven/ios/WDA is no running!
+	at com.jfinal.template.source.FileSource.getContent(FileSource.java:70)
+	at com.jfinal.template.Engine.buildTemplateBySourceFactory(Engine.java:153)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:138)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:60)
+	... 19 more
