@@ -23,9 +23,17 @@ public class IosController extends Controller {
 
     public void index() throws IOException, InterruptedException, JSONException {
 
-        render("ios.html");
+        render("remote.html");
+        //render("ios.html");
+
 
     }
+
+    //public void remote() throws IOException, InterruptedException, JSONException {
+
+    //    render("remote.html");
+
+    //}
 
     public void initWda() throws JSONException, IOException, InterruptedException {
 
