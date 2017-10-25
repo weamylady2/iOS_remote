@@ -64,7 +64,9 @@
                     <div class="canvas-container">
                         <canvas id="screen" width=360 height=640></canvas>
                     </div>
+                    <div style="text-align:center" class="form-group">
                      <span id="home" class="btn btn-success btn-left" onclick="home()">Home</span>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
@@ -100,7 +102,7 @@
                             <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
                                 
                             </textarea>-->
-                            <div id="apps" v-html="device.apps" style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y: scroll;float: left;">                                
+                            <div id="apps" v-html="device.apps" style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll;float: left;">
                             </div>
                             </td>
                            <!-- <td id="apps" v-html="device.apps"></td>-->
@@ -111,7 +113,7 @@
                            <!-- <textarea id="logs" v-html="device.logs" style="width:465px;height:300px" readonly="readonly">
                                 
                             </textarea> -->
-                            <div id="logs" v-html="device.logs" style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y: scroll;float: left;">                                
+                            <div id="logs" v-html="device.logs" style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll; float: left;">
                             </div>
                             </td>
                            <!--<td id="logs" v-html="device.logs"></td>-->
@@ -130,7 +132,7 @@
 
 <script>
     var canvas, ctx, $shot, $imgs;
-    var imgType = 'png', imgW = 414, imgH = 736;
+    var imgType = 'png', imgW = 375, imgH = 667;
     function init () {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
@@ -485,19 +487,19 @@
                 }
                 var _longClickTimeout = 800;
 
-                function calculateBounds() {
-                    var el = element;
-                    screen.bounds.w = el.offsetWidth
-                    screen.bounds.h = el.offsetHeight
-                    screen.bounds.x = 0
-                    screen.bounds.y = 0
-
-                    while (el.offsetParent) {
-                        screen.bounds.x += el.offsetLeft
-                        screen.bounds.y += el.offsetTop
-                        el = el.offsetParent
-                    }
-                }
+//                function calculateBounds() {
+//                    var el = element;
+//                    screen.bounds.w = el.offsetWidth
+//                    screen.bounds.h = el.offsetHeight
+//                    screen.bounds.x = 0
+//                    screen.bounds.y = 0
+//
+//                    while (el.offsetParent) {
+//                        screen.bounds.x += el.offsetLeft
+//                        screen.bounds.y += el.offsetTop
+//                        el = el.offsetParent
+//                    }
+//                }
 
                 function deactiveFinger(index) {
                     $(".finger-" + index).removeClass("active").removeClass("longClick")
@@ -513,10 +515,10 @@
                         return;
                     }
                     e.preventDefault()
-                    calculateBounds()
-                    console.log("page x: " + e.pageX + ", page y: " + e.pageY)
-                    var x = e.pageX - screen.bounds.x - 30
-                    var y = e.pageY - screen.bounds.y
+//                    calculateBounds()
+                    var x = e.offsetX - 30
+                    var y = e.offsetY
+                    console.log("page x: " + e.offsetX + ", page y: " + e.offsetY)
 
                     return {
                         e: e,
