@@ -43,6 +43,12 @@
             margin:0 auto;
             width:360px;
          }
+        .btn-home {
+            padding-top: 5px;
+            width:50px;
+            height: 50px;
+            margin: 0 auto
+         } 
     </style>
 </head>
 <body class="hold-transition skin-green-light layout-top-nav">
@@ -56,6 +62,7 @@
                 <div class="box box-success">
                     <div class="box-header">
                         <h4 style="margin-left: 0.6em;">iPhone 7 Plus 9.3
+                            <span id="begin" class="btn btn-danger btn-right">开始使用</span>
                             <span id="countTimer" class="btn-right" style="color:red; width:160px">已用时长：{{ record.duration|formatDuration }}</span>
                         </h4>
                     </div>
@@ -64,7 +71,9 @@
                     <div class="canvas-container">
                         <canvas id="screen" width=360 height=640></canvas>
                     </div>
-                     <span id="home" class="btn btn-success btn-left" onclick="home()">Home</span>
+                    <div class="btn-home">
+                        <span id="home" class="btn btn-success" onclick="home()">Home</span>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
@@ -72,6 +81,7 @@
                     <div class="box-header">
                        
                         <span id="shot" class="btn btn-success btn-left">截图</span>
+                        <span id="save" class="btn btn-success btn-left">下载</span>
                         <span class="btn btn-success fileinput-button btn-left">
                             <span>上传应用</span>
                             <input id="uploadfile" type="file" name="uploadfile" onchange="upload()"/>
@@ -80,11 +90,11 @@
                         <span id="stop" class="btn btn-danger btn-right">停止使用</span>
                     </div>
                     <div class="box-body">
-                        <div id="imgs"></div>
                         设备信息
                         <div class="attachment-block">
                          <table id="deviceinfo" class="table">
                           <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
+                          <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
                            <tbody>
                            <tr>
                             <td>设备名称：</td>
@@ -120,6 +130,8 @@
                          </table>
 
                         </div>
+                        <div id="imgs"></div>
+
                     </div>
                 </div>
             </div>
@@ -129,12 +141,13 @@
 </div>
 
 <script>
-    var canvas, ctx, $shot, $imgs;
+    var canvas, ctx, $shot,$save,$imgs;
     var imgType = 'png', imgW = 414, imgH = 736;
     function init () {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
         $shot = document.getElementById('shot');
+        $save = document.getElementById('save');        
         $imgs = document.getElementById('imgs');
         bind();
     }
@@ -142,6 +155,11 @@
 
         $shot.onclick = function (e) {
             $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgW/3, imgH/3, imgType));
+        };
+        $save.onclick = function (e) {
+            var type = 'png';
+            var f = 'ShotSave';
+            Canvas2Image.saveAsImage(canvas, imgW, imgH, type, f);
         }
 
     }
@@ -232,7 +250,7 @@
         if(document.getElementById('getlogbtn').textContent == "开始"){
             deviceDetail.device.logs = "";
             console.log("开始抓取日志...");
-
+            var i = 0;
             var obj = document.getElementById('logs');
 
             ws2 = new WebSocket(WSURL2)
@@ -246,10 +264,21 @@
                 deviceDetail.device.logs += message.data;
                 console.log('msg got:' + message.data);
                 document.getElementById('logs').value += message.data
+                i += 1;
                 //是否自动在底部滚动
                 //obj.scrollTop =  obj.scrollHeight; 
                 var scrollTop = $("#logs")[0].scrollHeight;
                 $("#logs").scrollTop(scrollTop);
+
+                if(i == 5)
+                {
+                  deviceDetail.device.logs = "";
+
+                 document.getElementById('logs').value = null;
+                 console.log("清空！");
+
+                 i - 5;
+                }    
 
             }
             ws2.onopen = function () {
