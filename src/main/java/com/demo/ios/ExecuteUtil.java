@@ -162,6 +162,23 @@ public class ExecuteUtil {
         return getOutputString(p.getInputStream()).trim();
 
     }
+    public String getDeviceType() throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("ideviceinfo", "-k", "ProductType");
+        Process p = pb.start();
+        p.waitFor();
+        return getOutputString(p.getInputStream()).trim();
+
+    }
+
+    public String getDeviceVersion() throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("ideviceinfo", "-k", "ProductVersion");
+        Process p = pb.start();
+        p.waitFor();
+        return getOutputString(p.getInputStream()).trim();
+
+    }
 
 
     public void exitWDA() throws IOException, InterruptedException {

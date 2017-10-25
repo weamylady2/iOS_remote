@@ -1,0 +1,68 @@
+<header class="main-header">
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" style="display:none;">
+        <div class="container" >
+            <div class="navbar-header">
+                <a href="" class="navbar-brand"><b>自动化测试</b></a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    #if(user)
+                    <li ><a href="#">接口测试 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="${ctx}/clientIndex">客户端测试</a></li>
+                    <li><a href="#">持续集成 </a></li>
+                    #else
+                    <li><a href="#" data-toggle="modal" data-target="#modal_load">接口测试 </a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#modal_load">客户端测试</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#modal_load">持续集成 </a></li>
+                    #end
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+
+            <!-- Navbar Right Menu -->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- User Account Menu -->
+                    <li class="dropdown user user-menu">
+                        <!-- Menu Toggle Button -->
+                        #if(user)
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">#(user.name)</a>
+                        <ul class="dropdown-menu">
+                            <!-- The user image in the menu -->
+                            <li class="user-header">
+                                <img src="${ctx}/assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                <p>
+                                    测试工程师
+                                    <small>2017/4/12注册</small>
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a href="${ctx}/logout" class="btn btn-default btn-flat">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                        #else
+                        <a href="#" data-toggle="modal" data-target="#modal_load">
+                        <!-- The user image in the navbar-->
+
+                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                        <span>登录</span></a>
+                        #end
+
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- /.navbar-custom-menu -->
+        </div>
+    </nav>
+</header>

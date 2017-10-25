@@ -55,9 +55,11 @@
             <div class="col-sm-14 col-md-6">
                 <div class="box box-success">
                     <div class="box-header">
-                        <h4 style="margin-left: 0.6em;">iPhone 7 Plus 9.3
+                        <h4 style="margin-left: 0.6em;">
+                            <span id="deviceTypeName"style="margin-left: 0.6em;">设备类型加载中...</span>
                             <span id="countTimer" class="btn-right" style="color:red; width:160px">已用时长：{{ record.duration|formatDuration }}</span>
                         </h4>
+
                     </div>
                     <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
                     <span class="finger finger-1"></span>
@@ -97,6 +99,10 @@
                             <td id="udid" v-text="device.udid"></td>
                            </tr>
                            <tr>
+                               <td>系统版本：</td>
+                               <td id="osversion" v-text="device.version"></td>
+                           </tr>
+                           <tr>
                             <td>已安装的App：</td>
                             <td>
                             <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
@@ -129,10 +135,10 @@
     </div>
 
 </div>
-
+<script src="/js/iosinfo.js"></script>
 <script>
     var canvas, ctx, $shot, $imgs;
-    var imgType = 'png', imgW = 375, imgH = 667;
+    var imgType = 'png' ,imgX=0,imgY=0
     function init () {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
@@ -160,6 +166,8 @@
                 udid: '',
                 apps: '',
                 logs: '',
+                type:'',
+                version:'',
             },
         },
         mounted: function () {
@@ -177,7 +185,15 @@
                         self.device.udid = ret.udid
                         self.device.name = ret.name
                         self.device.apps = ret.apps
+                        self.device.type = ret.type
+                        self.device.version=ret.version
                         console.log(udid)
+                        var typeString = self.device.type
+                        var realTypeName = iosinfo[typeString]["iPhoneType"]
+                        console.log(realTypeName)
+                        document.getElementById('deviceTypeName').textContent = realTypeName
+                        imgX = iosinfo[typeString]["ptX"]
+                        imgY = iosinfo[typeString]["ptY"]
                     })
             },
         },
@@ -216,19 +232,6 @@
         }
     });
 
-    function refreshdetail() {
-        console.log("getting device info...");
-        $.ajax({
-            url: "/ios/getDeviceInfo?",
-            method: "GET",
-        })
-            .then(function (ret) {
-                deviceDetail.device.udid = ret.udid
-                deviceDetail.device.name = ret.name
-                deviceDetail.device.apps = ret.apps
-                console.log(udid)
-            })
-    }
 
     function refreshlogs() {
         if(document.getElementById('getlogbtn').textContent == "开始"){
@@ -348,8 +351,8 @@
         // delimiters: ["[[", "]]"],
         data: {
             display: {
-                width: imgW,
-                height: imgH,
+                width: 0,
+                height: 0,
                 naturalWidth: 0,
                 naturalHeight: 0,
             },
@@ -522,10 +525,10 @@
 
                     return {
                         e: e,
-                        x: Math.floor(x / (element.clientWidth - 60) * self.display.width),
-                        y: Math.floor(y / element.clientHeight * self.display.height),
+                        x: Math.floor(x / (element.clientWidth - 60) * imgX),
+                        y: Math.floor(y / element.clientHeight * imgY),
                         pageX: x,
-                        pageY: y
+                        pageY: y,
                     }
                 }
 
