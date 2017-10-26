@@ -11,27 +11,31 @@
             float: left;
             margin-left: 0.6em
         }
+
         .btn-right {
             display: inline-block;
             float: right;
             margin-right: 0.6em
         }
+
         .fileinput-button {
             position: relative;
             display: inline-block;
         }
 
-        .fileinput-button input{
+        .fileinput-button input {
             position: absolute;
             right: 0px;
             top: 0px;
         }
+
         .fileinput-button {
             position: relative;
             display: inline-block;
             overflow: hidden;
         }
-        .fileinput-button input{
+
+        .fileinput-button input {
             position: absolute;
             left: 0px;
             top: 0px;
@@ -39,10 +43,11 @@
             -ms-filter: 'alpha(opacity=0)';
             font-size: 200px;
         }
+
         .canvas-container {
-            margin:0 auto;
-            width:360px;
-         }
+            margin: 0 auto;
+            width: 360px;
+        }
     </style>
 </head>
 <body class="hold-transition skin-green-light layout-top-nav">
@@ -51,12 +56,12 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content">
-        <!--适配Air 13.3 -->
+            <!--适配Air 13.3 -->
             <div class="col-sm-14 col-md-6">
                 <div class="box box-success">
                     <div class="box-header">
                         <h4 style="margin-left: 0.6em;">
-                            <span id="deviceTypeName"style="margin-left: 0.6em;">设备类型加载中...</span>
+                            <span id="deviceTypeName" style="margin-left: 0.6em;">设备类型加载中...</span>
                             <span id="countTimer" class="btn-right" style="color:red; width:160px">已用时长：{{ record.duration|formatDuration }}</span>
                         </h4>
 
@@ -67,14 +72,14 @@
                         <canvas id="screen" width=360 height=640></canvas>
                     </div>
                     <div style="text-align:center" class="form-group">
-                     <span id="home" class="btn btn-success btn-left" onclick="home()">Home</span>
+                        <span id="home" class="btn btn-success btn-left" onclick="home()">Home</span>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="box box-success">
                     <div class="box-header">
-                       
+
                         <span id="shot" class="btn btn-success btn-left">截图</span>
                         <span class="btn btn-success fileinput-button btn-left">
                             <span>上传应用</span>
@@ -83,49 +88,84 @@
 
                         <span id="stop" class="btn btn-danger btn-right">停止使用</span>
                     </div>
+
+                    <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="bundleid" type="text" class="form-control" v-model="inputText"
+                                   placeholder="请输入bundle id">
+                            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="launchApp()">以BundleId启动App</button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="input" type="text" class="form-control" v-model="inputText"
+                                   placeholder="Input text ..."
+                                   @keyup.enter="sendText(inputText+'\n')">
+                            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-default" type="button" onclick="clearText()">清空</button>
+            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                               placeholder="请输入bundle id">
+                        <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="uninstallApp()">以BundleId卸载App</button>
+                        </span>
+                    </div>
+
                     <div class="box-body">
                         <div id="imgs"></div>
                         设备信息
                         <div class="attachment-block">
-                         <table id="deviceinfo" class="table">
-                          <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
-                           <tbody>
-                           <tr>
-                            <td>设备名称：</td>
-                            <td id="name" v-text="device.name"></td>
-                           </tr>
-                           <tr>
-                            <td>UDID：</td>
-                            <td id="udid" v-text="device.udid"></td>
-                           </tr>
-                           <tr>
-                               <td>系统版本：</td>
-                               <td id="osversion" v-text="device.version"></td>
-                           </tr>
-                           <tr>
-                            <td>已安装的App：</td>
-                            <td>
-                            <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
-                                
-                            </textarea>-->
-                            <div id="apps" v-html="device.apps" style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll;float: left;">
-                            </div>
-                            </td>
-                           <!-- <td id="apps" v-html="device.apps"></td>-->
-                           </tr>
-                           <tr>
-                            <td>日志：</td>
-                            <td>
-                           <!-- <textarea id="logs" v-html="device.logs" style="width:465px;height:300px" readonly="readonly">
-                                
-                            </textarea> -->
-                            <div id="logs" v-html="device.logs" style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll; float: left;">
-                            </div>
-                            </td>
-                           <!--<td id="logs" v-html="device.logs"></td>-->
-                           </tr>
-                           </tbody>
-                         </table>
+                            <table id="deviceinfo" class="table">
+                                <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
+                                <input id="filter-bundleid" type="text" value="com.apple.Preference" class="form-control" v-model="inputText"
+                                       placeholder="请输入过滤日志的bundle id">
+                                <span class="input-group-btn">
+                                <tbody>
+                                <tr>
+                                    <td>设备名称：</td>
+                                    <td id="name" v-text="device.name"></td>
+                                </tr>
+                                <tr>
+                                    <td>UDID：</td>
+                                    <td id="udid" v-text="device.udid"></td>
+                                </tr>
+                                <tr>
+                                    <td>系统版本：</td>
+                                    <td id="osversion" v-text="device.version"></td>
+                                </tr>
+                                <tr>
+                                    <td>已安装的App：</td>
+                                    <td>
+                                        <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
+
+                                        </textarea>-->
+                                        <div id="apps" v-html="device.apps"
+                                             style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll;float: left;">
+                                        </div>
+                                    </td>
+                                    <!-- <td id="apps" v-html="device.apps"></td>-->
+                                </tr>
+                                <tr>
+                                    <td>日志：</td>
+                                    <td>
+                                        <!-- <textarea id="logs" v-html="device.logs" style="width:465px;height:300px" readonly="readonly">
+
+                                         </textarea> -->
+                                        <div id="logs" v-html="device.logs"
+                                             style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll; float: left;">
+                                        </div>
+                                    </td>
+                                    <!--<td id="logs" v-html="device.logs"></td>-->
+                                </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>
@@ -138,22 +178,26 @@
 <script src="/js/iosinfo.js"></script>
 <script>
     var canvas, ctx, $shot, $imgs;
-    var imgType = 'png' ,imgX=0,imgY=0
-    function init () {
+    var imgType = 'png', imgX = 0, imgY = 0
+
+    function init() {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
         $shot = document.getElementById('shot');
         $imgs = document.getElementById('imgs');
         bind();
     }
-    function bind () {
+
+    onload = init;
+
+    function bind() {
 
         $shot.onclick = function (e) {
-            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgW/3, imgH/3, imgType));
+            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgX / 3, imgY / 3, imgType));
         }
 
     }
-    onload = init;
+
 </script>
 <script>
     var WSURL2 = "ws://" + window.location.host + "/websocket2";
@@ -166,8 +210,8 @@
                 udid: '',
                 apps: '',
                 logs: '',
-                type:'',
-                version:'',
+                type: '',
+                version: '',
             },
         },
         mounted: function () {
@@ -186,7 +230,7 @@
                         self.device.name = ret.name
                         self.device.apps = ret.apps
                         self.device.type = ret.type
-                        self.device.version=ret.version
+                        self.device.version = ret.version
                         console.log(udid)
                         var typeString = self.device.type
                         var realTypeName = iosinfo[typeString]["iPhoneType"]
@@ -226,7 +270,7 @@
         mounted: function () {
             var self = this;
             self.record.startTime = new Date().getTime();
-            self.record.ticker = setInterval(function() {
+            self.record.ticker = setInterval(function () {
                 self.record.duration = new Date().getTime() - self.record.startTime;
             }.bind(self), 1000);
         }
@@ -234,13 +278,20 @@
 
 
     function refreshlogs() {
-        if(document.getElementById('getlogbtn').textContent == "开始"){
+
+
+        if (document.getElementById('getlogbtn').textContent == "开始") {
+            var id = document.getElementById('filter-bundleid').value
+            if (id == "" || id.indexOf(".") == -1) {
+                alert("请输入过滤日志的bundle id！")
+                return
+            }
             deviceDetail.device.logs = "";
             console.log("开始抓取日志...");
 
             var obj = document.getElementById('logs');
 
-            ws2 = new WebSocket(WSURL2)
+            ws2 = new WebSocket(WSURL2+"/"+id)
             ws2.onclose = function () {
                 console.log('ws2 onclose', arguments)
             }
@@ -259,10 +310,11 @@
             }
             ws2.onopen = function () {
                 console.log('ws2 onopen', arguments)
+                ws2.send(id);
             }
             document.getElementById('getlogbtn').textContent = "停止"
             deviceDetail.device.getlog = "停止"
-        }else{
+        } else {
             ws2.close();
             console.log("停止抓取日志...");
             document.getElementById('getlogbtn').textContent = "开始"
@@ -338,7 +390,6 @@
                 console.log(ret);
             })
     }
-
 
 
 </script>
@@ -463,21 +514,21 @@
             clearText: function (n) {
                 this.sendText("\b".repeat(n || 30))
             },
-            initScreenSize: function() {
-              $.ajax({
-                  url: "/status",
+            initScreenSize: function () {
+                $.ajax({
+                    url: "/status",
                 })
-                .then(function(ret) {
-                  this.sessionId = ret.sessionId;
-                  Object.assign(this.device, ret.value.device);
-                  return $.ajax({
-                    url: "/session/" + ret.sessionId + "/window/size",
-                  })
-                }.bind(this))
-                .then(function(ret) {
-                  this.display.width = ret.value.width;
-                  this.display.height = ret.value.height;
-                }.bind(this))
+                    .then(function (ret) {
+                        this.sessionId = ret.sessionId;
+                        Object.assign(this.device, ret.value.device);
+                        return $.ajax({
+                            url: "/session/" + ret.sessionId + "/window/size",
+                        })
+                    }.bind(this))
+                    .then(function (ret) {
+                        this.display.width = ret.value.width;
+                        this.display.height = ret.value.height;
+                    }.bind(this))
             },
             initTouchListener: function () {
                 var self = this;
@@ -620,47 +671,45 @@
 
 <script type="text/javascript">
 
-function upload() {
-    var file = document.getElementById("uploadfile");
-    var fileInfo = file.files[0];
-    console.log(fileInfo);
-    if(!fileInfo){
-        alert("请选择文件！");
-        return false;
+    function upload() {
+        var file = document.getElementById("uploadfile");
+        var fileInfo = file.files[0];
+        console.log(fileInfo);
+        if (!fileInfo) {
+            alert("请选择文件！");
+            return false;
+        }
+
+        var fileName = fileInfo.name;
+        //获取文件后缀名
+        var file_typename = fileName.substring(
+            fileName.lastIndexOf('.') + 1, fileName.length);
+        if (file_typename.toLowerCase() != 'ipa') {
+            alert("请上传.ipa类型的文件！");
+            return false;
+        }
+
+        try {
+            $.ajaxFileUpload({
+                url: '/ios/upload',   //提交的路径
+                type: 'post',
+                secureuri: false, // 是否启用安全提交，默认为false
+                fileElementId: 'uploadfile', // file控件id
+                dataType: 'json',
+                data: {},
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                },
+                error: function (data, status) {
+                    alert("上传失败");
+                }
+            });
+        } catch (err) {
+            alert("请上传.ipa文件，不要上传其它类型！" + err.message);
+        }
+
     }
-
-    var fileName = fileInfo.name;
-    //获取文件后缀名
-    var file_typename = fileName.substring(
-        fileName.lastIndexOf('.') + 1, fileName.length);
-    if(file_typename.toLowerCase() != 'ipa'){
-        alert("请上传.ipa类型的文件！");
-        return false;
-    }
-
-    try{
-        $.ajaxFileUpload({
-            url : '/ios/upload',   //提交的路径
-            type: 'post',
-            secureuri : false, // 是否启用安全提交，默认为false
-            fileElementId : 'uploadfile', // file控件id
-            dataType : 'json',
-            data:{
-
-            },
-            success : function(data, status) {
-                console.log(data);
-                console.log(status);
-            },
-            error : function(data, status) {
-                alert("上传失败");
-            }
-        });
-    } catch(err) {
-        alert("请上传.ipa文件，不要上传其它类型！" + err.message);
-    }
-
-}
 </script>
 
 <script>
@@ -840,7 +889,7 @@ function upload() {
     }
 
     ws.onmessage = function (message) {
-      //console.log('got jpeg', arguments)
+        //console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
             type: 'image/jpeg'
         })

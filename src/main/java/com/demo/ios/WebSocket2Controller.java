@@ -11,6 +11,7 @@ import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 import com.jfinal.kit.JsonKit;
@@ -23,17 +24,21 @@ import com.demo.ios.*;
 import java.nio.ByteBuffer;
 
 
-@ServerEndpoint("/websocket2")
+@ServerEndpoint("/websocket2/{bid}")
 public class WebSocket2Controller {
 
     private ExecuteUtil bash = new ExecuteUtil();
     public boolean getLog = false;
     public StringBuffer logsBuffer = new StringBuffer();
     Session mySession = null;
+    String bundleId = "";
+
+
 
     @OnOpen
-    public void onOpen(Session session) throws IOException, InterruptedException, JSONException {
-        System.out.println("ws2 opened!:");
+    public void onOpen(@PathParam("bid") String bid, Session session) throws IOException, InterruptedException, JSONException {
+        System.out.println("ws2 opened!: " + bid);
+        this.bundleId = bid;
         this.mySession = session;
         this.getLog = true;
         new Thread(new Runnable() {
@@ -87,15 +92,18 @@ public class WebSocket2Controller {
             BufferedReader reader = new BufferedReader(new InputStreamReader(ips));
             String line;
             while (this.getLog && (line = reader.readLine()) != null) {
-                line += "<br />";
-                System.out.println(line);
+
 //                this.logsBuffer.append(line);
-                if(this.mySession.isOpen()){
-                    this.mySession.getBasicRemote().sendText(line);
-                }else{
+                if(!this.mySession.isOpen()) {
                     p.destroy();
                     System.out.println("服务器2停止");
                     break;
+                }else if(line.contains(this.bundleId)){
+                    line += "<br />";
+                    System.out.println(line);
+                    this.mySession.getBasicRemote().sendText(line);
+                }else{
+                    continue;
                 }
 
             }
