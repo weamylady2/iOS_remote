@@ -48,6 +48,13 @@
             margin: 0 auto;
             width: 360px;
         }
+
+        .btn-home {
+            padding-top: 5px;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto
+        }
     </style>
 </head>
 <body class="hold-transition skin-green-light layout-top-nav">
@@ -72,7 +79,9 @@
                         <canvas id="screen" width=360 height=640></canvas>
                     </div>
                     <div style="text-align:center" class="form-group">
-                        <span id="home" class="btn btn-success btn-left" onclick="home()">Home</span>
+                        <div class="btn-home">
+                            <span id="home" class="btn btn-success" onclick="home()">Home</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -81,6 +90,7 @@
                     <div class="box-header">
 
                         <span id="shot" class="btn btn-success btn-left">截图</span>
+                        <!--<span id="save" class="btn btn-success btn-left">下载</span>-->
                         <span class="btn btn-success fileinput-button btn-left">
                             <span>上传应用</span>
                             <input id="uploadfile" type="file" name="uploadfile" onchange="upload()"/>
@@ -89,13 +99,13 @@
                         <span id="stop" class="btn btn-danger btn-right">停止使用</span>
                     </div>
 
-                    <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法夸app使用sendText.</div>
+                    <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法跨app使用sendText.</div>
                     <div class="form-group">
                         <div class="input-group">
                             <input id="bundleid" type="text" class="form-control" v-model="inputText"
                                    placeholder="请输入bundle id">
                             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="launchApp()">以BundleId启动App</button>
+              <button class="btn btn-success" type="button" onclick="launchApp()">以BundleId启动App</button>
                         </span>
                         </div>
                     </div>
@@ -105,40 +115,40 @@
                                    placeholder="Input text ..."
                                    @keyup.enter="sendText(inputText+'\n')">
                             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="sendText()">发送文本</button>
-              <button class="btn btn-default" type="button" onclick="clearText()">清空</button>
-            </span>
+              <button class="btn btn-success" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-success" type="button" onclick="clearText()">清空</button>
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
-                        <input id="uninstallid" type="text" class="form-control" v-model="inputText"
-                               placeholder="请输入bundle id">
-                        <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="uninstallApp()">以BundleId卸载App</button>
-                        </span>
+                        <div class="input-group">
+                            <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                                   placeholder="请输入bundle id">
+                            <span class="input-group-btn">
+                            <button class="btn btn-success" type="button"
+                                    onclick="uninstallApp()">以BundleId卸载App</button>
+                                </span>
+                        </div>
                     </div>
-
                     <div class="box-body">
-                        <div id="imgs"></div>
                         设备信息
                         <div class="attachment-block">
                             <table id="deviceinfo" class="table">
-                                <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
-                                <input id="filter-bundleid" type="text" value="com.apple.Preference" class="form-control" v-model="inputText"
-                                       placeholder="请输入过滤日志的bundle id">
                                 <span class="input-group-btn">
+                                    <div class="btn btn-success" onclick="refreshdetail()">刷新信息</div>
+                                </span>
                                 <tbody>
                                 <tr>
                                     <td>设备名称：</td>
                                     <td id="name" v-text="device.name"></td>
                                 </tr>
                                 <tr>
-                                    <td>UDID：</td>
-                                    <td id="udid" v-text="device.udid"></td>
-                                </tr>
-                                <tr>
                                     <td>系统版本：</td>
                                     <td id="osversion" v-text="device.version"></td>
+                                </tr>
+                                <tr>
+                                    <td>UDID：</td>
+                                    <td id="udid" v-text="device.udid"></td>
                                 </tr>
                                 <tr>
                                     <td>已安装的App：</td>
@@ -152,6 +162,21 @@
                                     </td>
                                     <!-- <td id="apps" v-html="device.apps"></td>-->
                                 </tr>
+                                </tbody>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                         <span class="input-group-btn">
+                                    <button id="getlogbtn" class="btn btn-success" onclick="refreshlogs()">开始日志抓取</button>
+                        </span>
+                                        <input id="filter-bundleid" type="text" value="com.apple.Preference"
+                                               class="form-control" v-model="inputText"
+                                               placeholder="请输入过滤日志的bundle id">
+
+                                    </div>
+                                </div>
+
+                                <tbody>
                                 <tr>
                                     <td>日志：</td>
                                     <td>
@@ -162,12 +187,12 @@
                                              style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll; float: left;">
                                         </div>
                                     </td>
-                                    <!--<td id="logs" v-html="device.logs"></td>-->
                                 </tr>
                                 </tbody>
                             </table>
 
                         </div>
+                        <div id="imgs"></div>
                     </div>
                 </div>
             </div>
@@ -177,13 +202,14 @@
 </div>
 <script src="/js/iosinfo.js"></script>
 <script>
-    var canvas, ctx, $shot, $imgs;
-    var imgType = 'png', imgX = 0, imgY = 0
+    var canvas, ctx, $shot, $save, $imgs;
+    var imgType = 'png', imgX = 375, imgY = 667
 
     function init() {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
         $shot = document.getElementById('shot');
+        $save = document.getElementById('save');
         $imgs = document.getElementById('imgs');
         bind();
     }
@@ -193,8 +219,16 @@
     function bind() {
 
         $shot.onclick = function (e) {
-            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgX / 3, imgY / 3, imgType));
+//            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgX / 3, imgY / 3, imgType));
+            var type = 'jpg';
+            var f = 'ShotSave';
+            Canvas2Image.saveAsImage(canvas, imgX, imgY, type, f);
         }
+//        $save.onclick = function (e) {
+//            var type = 'jpg';
+//            var f = 'ShotSave';
+//            Canvas2Image.saveAsImage(canvas, imgX, imgY, type, f);
+//        }
 
     }
 
@@ -243,6 +277,29 @@
         },
     });
 
+    function refreshdetail() {
+        console.log("getting device info...");
+        var self = this;
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                deviceDetail.device.type = ret.type
+                deviceDetail.device.version = ret.version
+                console.log(udid)
+                var typeString = deviceDetail.device.type
+                var realTypeName = iosinfo[typeString]["iPhoneType"]
+                console.log(realTypeName)
+                document.getElementById('deviceTypeName').textContent = realTypeName
+                imgX = iosinfo[typeString]["ptX"]
+                imgY = iosinfo[typeString]["ptY"]
+            })
+    }
+
     var countTimer = new Vue({
         el: "#countTimer",
         data: {
@@ -280,7 +337,7 @@
     function refreshlogs() {
 
 
-        if (document.getElementById('getlogbtn').textContent == "开始") {
+        if (document.getElementById('getlogbtn').textContent == "开始日志抓取") {
             var id = document.getElementById('filter-bundleid').value
             if (id == "" || id.indexOf(".") == -1) {
                 alert("请输入过滤日志的bundle id！")
@@ -291,7 +348,7 @@
 
             var obj = document.getElementById('logs');
 
-            ws2 = new WebSocket(WSURL2+"/"+id)
+            ws2 = new WebSocket(WSURL2 + "/" + id)
             ws2.onclose = function () {
                 console.log('ws2 onclose', arguments)
             }
@@ -312,12 +369,11 @@
                 console.log('ws2 onopen', arguments)
                 ws2.send(id);
             }
-            document.getElementById('getlogbtn').textContent = "停止"
-            deviceDetail.device.getlog = "停止"
+            document.getElementById('getlogbtn').textContent = "停止日志抓取"
         } else {
             ws2.close();
             console.log("停止抓取日志...");
-            document.getElementById('getlogbtn').textContent = "开始"
+            document.getElementById('getlogbtn').textContent = "开始日志抓取"
         }
     }
 
