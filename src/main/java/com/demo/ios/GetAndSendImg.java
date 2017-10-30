@@ -253,7 +253,7 @@ public class GetAndSendImg {
         BufferedImage bufferedImage = ImageIO.read(in);
 //        notifyObservers(bufferedImage);
          String filePath = String.format("0.jpg");
-        System.out.println(filePath);
+         System.out.println(filePath);
          ImageIO.write(bufferedImage, "jpg", new File(filePath));
         finalBytes = null;
     }
