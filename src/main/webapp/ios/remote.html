@@ -20,8 +20,7 @@
             position: relative;
             display: inline-block;
         }
-
-        .fileinput-button input{
+        .fileinput-button input {
             position: absolute;
             right: 0px;
             top: 0px;
@@ -31,7 +30,7 @@
             display: inline-block;
             overflow: hidden;
         }
-        .fileinput-button input{
+        .fileinput-button input {
             position: absolute;
             left: 0px;
             top: 0px;
@@ -40,15 +39,15 @@
             font-size: 200px;
         }
         .canvas-container {
-            margin:0 auto;
-            width:360px;
-         }
+            margin: 0 auto;
+            width: 360px;
+        }
         .btn-home {
             padding-top: 5px;
-            width:50px;
+            width: 50px;
             height: 50px;
             margin: 0 auto
-         } 
+        }
     </style>
 </head>
 <body class="hold-transition skin-green-light layout-top-nav">
@@ -57,31 +56,34 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <section class="content">
-        <!--适配Air 13.3 -->
+            <!--适配Air 13.3 -->
             <div class="col-sm-14 col-md-6">
                 <div class="box box-success">
                     <div class="box-header">
-                        <h4 style="margin-left: 0.6em;">iPhone 7 Plus 9.3
-                            <span id="begin" class="btn btn-danger btn-right">开始使用</span>
+                        <h4 style="margin-left: 0.6em;">
+                            <span id="deviceTypeName" style="margin-left: 0.6em;">设备类型加载中...</span>
                             <span id="countTimer" class="btn-right" style="color:red; width:160px">已用时长：{{ record.duration|formatDuration }}</span>
                         </h4>
+
                     </div>
                     <span class="finger finger-0" style="transform: translate3d(0, 0, 0)"></span>
                     <span class="finger finger-1"></span>
                     <div class="canvas-container">
                         <canvas id="screen" width=360 height=640></canvas>
                     </div>
-                    <div class="btn-home">
-                        <span id="home" class="btn btn-success" onclick="home()">Home</span>
+                    <div style="text-align:center" class="form-group">
+                        <div class="btn-home">
+                            <span id="home" class="btn btn-success" onclick="home()">Home</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="box box-success">
                     <div class="box-header">
-                       
+
                         <span id="shot" class="btn btn-success btn-left">截图</span>
-                        <span id="save" class="btn btn-success btn-left">下载</span>
+                        <!--<span id="save" class="btn btn-success btn-left">下载</span>-->
                         <span class="btn btn-success fileinput-button btn-left">
                             <span>上传应用</span>
                             <input id="uploadfile" type="file" name="uploadfile" onchange="upload()"/>
@@ -89,49 +91,99 @@
 
                         <span id="stop" class="btn btn-danger btn-right">停止使用</span>
                     </div>
+
+                    <div class="form-group">要使用sentText/clear功能，请在下方输入bundleId并启动App，无法跨app使用sendText.</div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="bundleid" type="text" class="form-control" v-model="inputText"
+                                   placeholder="请输入bundle id">
+                            <span class="input-group-btn">
+              <button class="btn btn-success" type="button" onclick="launchApp()">以BundleId启动App</button>
+                        </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="input" type="text" class="form-control" v-model="inputText"
+                                   placeholder="Input text ..."
+                                   @keyup.enter="sendText(inputText+'\n')">
+                            <span class="input-group-btn">
+              <button class="btn btn-success" type="button" onclick="sendText()">发送文本</button>
+              <button class="btn btn-success" type="button" onclick="clearText()">清空</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                                   placeholder="请输入bundle id">
+                            <span class="input-group-btn">
+                            <button class="btn btn-success" type="button"
+                                    onclick="uninstallApp()">以BundleId卸载App</button>
+                                </span>
+                        </div>
+                    </div>
                     <div class="box-body">
                         设备信息
                         <div class="attachment-block">
-                         <table id="deviceinfo" class="table">
-                          <div id="getlogbtn" class="btn btn-default" onclick="refreshlogs()">开始</div>
-                          <div class="btn btn-default" onclick="refreshdetail()">刷新</div>
-                           <tbody>
-                           <tr>
-                            <td>设备名称：</td>
-                            <td id="name" v-text="device.name"></td>
-                           </tr>
-                           <tr>
-                            <td>UDID：</td>
-                            <td id="udid" v-text="device.udid"></td>
-                           </tr>
-                           <tr>
-                            <td>已安装的App：</td>
-                            <td>
-                            <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
-                                
-                            </textarea>-->
-                            <div id="apps" v-html="device.apps" style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y: scroll;float: left;">                                
-                            </div>
-                            </td>
-                           <!-- <td id="apps" v-html="device.apps"></td>-->
-                           </tr>
-                           <tr>
-                            <td>日志：</td>
-                            <td>
-                           <!-- <textarea id="logs" v-html="device.logs" style="width:465px;height:300px" readonly="readonly">
-                                
-                            </textarea> -->
-                            <div id="logs" v-html="device.logs" style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y: scroll;float: left;">                                
-                            </div>
-                            </td>
-                           <!--<td id="logs" v-html="device.logs"></td>-->
-                           </tr>
-                           </tbody>
-                         </table>
+                            <table id="deviceinfo" class="table">
+                                <span class="input-group-btn">
+                                    <div class="btn btn-success" onclick="refreshdetail()">刷新信息</div>
+                                </span>
+                                <tbody>
+                                <tr>
+                                    <td>设备名称：</td>
+                                    <td id="name" v-text="device.name"></td>
+                                </tr>
+                                <tr>
+                                    <td>系统版本：</td>
+                                    <td id="osversion" v-text="device.version"></td>
+                                </tr>
+                                <tr>
+                                    <td>UDID：</td>
+                                    <td id="udid" v-text="device.udid"></td>
+                                </tr>
+                                <tr>
+                                    <td>已安装的App：</td>
+                                    <td>
+                                        <!--<textarea id="apps" v-html="device.apps" style="width:465px;height:300px" readonly="readonly">
+                                        </textarea>-->
+                                        <div id="apps" v-html="device.apps"
+                                             style="width:465px; height: 150px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll;float: left;">
+                                        </div>
+                                    </td>
+                                    <!-- <td id="apps" v-html="device.apps"></td>-->
+                                </tr>
+                                </tbody>
+
+                                <div class="form-group">
+                                    <div class="input-group">
+                                         <span class="input-group-btn">
+                                    <button id="getlogbtn" class="btn btn-success" onclick="refreshlogs()">开始日志抓取</button>
+                        </span>
+                                        <input id="filter-bundleid" type="text" value="com.apple.Preference"
+                                               class="form-control" v-model="inputText"
+                                               placeholder="请输入过滤日志的bundle id">
+
+                                    </div>
+                                </div>
+
+                                <tbody>
+                                <tr>
+                                    <td>日志：</td>
+                                    <td>
+                                        <!-- <textarea id="logs" v-html="device.logs" style="width:465px;height:300px" readonly="readonly">
+                                         </textarea> -->
+                                        <div id="logs" v-html="device.logs"
+                                             style="width:465px; height: 300px;border: 1px #ccc solid; overflow-y:scroll; overflow-y:visible; overflow-x:scroll; float: left;">
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                         </div>
                         <div id="imgs"></div>
-
                     </div>
                 </div>
             </div>
@@ -139,31 +191,32 @@
     </div>
 
 </div>
-
+<script src="/js/iosinfo.js"></script>
 <script>
-    var canvas, ctx, $shot,$save,$imgs;
-    var imgType = 'png', imgW = 414, imgH = 736;
-    function init () {
+    var canvas, ctx, $shot, $save, $imgs;
+    var imgType = 'png', imgX = 375, imgY = 667
+    function init() {
         canvas = document.getElementById('screen');
         ctx = canvas.getContext('2d');
         $shot = document.getElementById('shot');
-        $save = document.getElementById('save');        
+        $save = document.getElementById('save');
         $imgs = document.getElementById('imgs');
         bind();
     }
-    function bind () {
-
-        $shot.onclick = function (e) {
-            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgW/3, imgH/3, imgType));
-        };
-        $save.onclick = function (e) {
-            var type = 'png';
-            var f = 'ShotSave';
-            Canvas2Image.saveAsImage(canvas, imgW, imgH, type, f);
-        }
-
-    }
     onload = init;
+    function bind() {
+        $shot.onclick = function (e) {
+//            $imgs.appendChild(Canvas2Image.convertToImage(canvas, imgX / 3, imgY / 3, imgType));
+            var type = 'jpg';
+            var f = 'ShotSave';
+            Canvas2Image.saveAsImage(canvas, imgX, imgY, type, f);
+        }
+//        $save.onclick = function (e) {
+//            var type = 'jpg';
+//            var f = 'ShotSave';
+//            Canvas2Image.saveAsImage(canvas, imgX, imgY, type, f);
+//        }
+    }
 </script>
 <script>
     var WSURL2 = "ws://" + window.location.host + "/websocket2";
@@ -176,6 +229,8 @@
                 udid: '',
                 apps: '',
                 logs: '',
+                type: '',
+                version: '',
             },
         },
         mounted: function () {
@@ -193,12 +248,41 @@
                         self.device.udid = ret.udid
                         self.device.name = ret.name
                         self.device.apps = ret.apps
+                        self.device.type = ret.type
+                        self.device.version = ret.version
                         console.log(udid)
+                        var typeString = self.device.type
+                        var realTypeName = iosinfo[typeString]["iPhoneType"]
+                        console.log(realTypeName)
+                        document.getElementById('deviceTypeName').textContent = realTypeName
+                        imgX = iosinfo[typeString]["ptX"]
+                        imgY = iosinfo[typeString]["ptY"]
                     })
             },
         },
     });
-
+    function refreshdetail() {
+        console.log("getting device info...");
+        var self = this;
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                deviceDetail.device.type = ret.type
+                deviceDetail.device.version = ret.version
+                console.log(udid)
+                var typeString = deviceDetail.device.type
+                var realTypeName = iosinfo[typeString]["iPhoneType"]
+                console.log(realTypeName)
+                document.getElementById('deviceTypeName').textContent = realTypeName
+                imgX = iosinfo[typeString]["ptX"]
+                imgY = iosinfo[typeString]["ptY"]
+            })
+    }
     var countTimer = new Vue({
         el: "#countTimer",
         data: {
@@ -215,7 +299,6 @@
                 function pad2(number) {
                     return (number < 10 ? '0' : '') + number
                 }
-
                 var totalSeconds = Math.floor(value / 1000); //"00:00:00"
                 var mms = value % 1000;
                 var ms = totalSeconds % 60;
@@ -226,34 +309,22 @@
         mounted: function () {
             var self = this;
             self.record.startTime = new Date().getTime();
-            self.record.ticker = setInterval(function() {
+            self.record.ticker = setInterval(function () {
                 self.record.duration = new Date().getTime() - self.record.startTime;
             }.bind(self), 1000);
         }
     });
-
-    function refreshdetail() {
-        console.log("getting device info...");
-        $.ajax({
-            url: "/ios/getDeviceInfo?",
-            method: "GET",
-        })
-            .then(function (ret) {
-                deviceDetail.device.udid = ret.udid
-                deviceDetail.device.name = ret.name
-                deviceDetail.device.apps = ret.apps
-                console.log(udid)
-            })
-    }
-
     function refreshlogs() {
-        if(document.getElementById('getlogbtn').textContent == "开始"){
+        if (document.getElementById('getlogbtn').textContent == "开始日志抓取") {
+            var id = document.getElementById('filter-bundleid').value
+            if (id == "" || id.indexOf(".") == -1) {
+                alert("请输入过滤日志的bundle id！")
+                return
+            }
             deviceDetail.device.logs = "";
             console.log("开始抓取日志...");
-            var i = 0;
             var obj = document.getElementById('logs');
-
-            ws2 = new WebSocket(WSURL2)
+            ws2 = new WebSocket(WSURL2 + "/" + id)
             ws2.onclose = function () {
                 console.log('ws2 onclose', arguments)
             }
@@ -264,35 +335,22 @@
                 deviceDetail.device.logs += message.data;
                 console.log('msg got:' + message.data);
                 document.getElementById('logs').value += message.data
-                i += 1;
                 //是否自动在底部滚动
                 //obj.scrollTop =  obj.scrollHeight; 
                 var scrollTop = $("#logs")[0].scrollHeight;
                 $("#logs").scrollTop(scrollTop);
-
-                if(i == 5)
-                {
-                  deviceDetail.device.logs = "";
-
-                 document.getElementById('logs').value = null;
-                 console.log("清空！");
-
-                 i - 5;
-                }    
-
             }
             ws2.onopen = function () {
                 console.log('ws2 onopen', arguments)
+                ws2.send(id);
             }
-            document.getElementById('getlogbtn').textContent = "停止"
-            deviceDetail.device.getlog = "停止"
-        }else{
+            document.getElementById('getlogbtn').textContent = "停止日志抓取"
+        } else {
             ws2.close();
             console.log("停止抓取日志...");
-            document.getElementById('getlogbtn').textContent = "开始"
+            document.getElementById('getlogbtn').textContent = "开始日志抓取"
         }
     }
-
     function home() {
         $.ajax({
             url: "/ios/home",
@@ -302,7 +360,6 @@
                 console.log(ret);
             })
     }
-
     function launchApp() {
         var id = document.getElementById('bundleid').value
         if (id != "") {
@@ -315,7 +372,6 @@
                 })
         }
     }
-
     function uninstallApp() {
         var id = document.getElementById('uninstallid').value
         if (id != "") {
@@ -328,7 +384,6 @@
                 })
         }
     }
-
     function getDeviceInfo() {
         var udid = "";
         $.ajax({
@@ -340,7 +395,6 @@
                 console.log(udid)
             })
     }
-
     function sendText() {
         var sendValue = encodeURI(encodeURI(document.getElementById('input').value))
         console.log("Input Text = " + sendValue)
@@ -352,7 +406,6 @@
                 console.log(ret);
             })
     }
-
     function clearText() {
         $.ajax({
             url: "/ios/clear",
@@ -362,21 +415,17 @@
                 console.log(ret);
             })
     }
-
-
-
 </script>
 
 
 <script>
-
     var app = new Vue({
         el: "#screen",
         // delimiters: ["[[", "]]"],
         data: {
             display: {
-                width: imgW,
-                height: imgH,
+                width: 0,
+                height: 0,
                 naturalWidth: 0,
                 naturalHeight: 0,
             },
@@ -397,14 +446,11 @@
                 name: "20170603-test",
             }]
         },
-
-
         filters: {
             formatDuration: function (value) {
                 function pad2(number) {
                     return (number < 10 ? '0' : '') + number
                 }
-
                 var totalSeconds = Math.floor(value / 1000); //"00:00:00"
                 var mms = value % 1000;
                 var ms = totalSeconds % 60;
@@ -414,7 +460,6 @@
         },
         mounted: function () {
             var self = this;
-
             this.initTouchListener();
             this.initScreenSize();
             var self = this;
@@ -430,7 +475,6 @@
             }.bind(this);
         },
         methods: {
-
             tap: function (x, y) {
                 var self = this;
                 return $.ajax({
@@ -483,25 +527,24 @@
                     console.log(ret);
                 })
             },
-
             clearText: function (n) {
                 this.sendText("\b".repeat(n || 30))
             },
-            initScreenSize: function() {
-              $.ajax({
-                  url: "/status",
+            initScreenSize: function () {
+                $.ajax({
+                    url: "/status",
                 })
-                .then(function(ret) {
-                  this.sessionId = ret.sessionId;
-                  Object.assign(this.device, ret.value.device);
-                  return $.ajax({
-                    url: "/session/" + ret.sessionId + "/window/size",
-                  })
-                }.bind(this))
-                .then(function(ret) {
-                  this.display.width = ret.value.width;
-                  this.display.height = ret.value.height;
-                }.bind(this))
+                    .then(function (ret) {
+                        this.sessionId = ret.sessionId;
+                        Object.assign(this.device, ret.value.device);
+                        return $.ajax({
+                            url: "/session/" + ret.sessionId + "/window/size",
+                        })
+                    }.bind(this))
+                    .then(function (ret) {
+                        this.display.width = ret.value.width;
+                        this.display.height = ret.value.height;
+                    }.bind(this))
             },
             initTouchListener: function () {
                 var self = this;
@@ -513,25 +556,22 @@
                     beginTime: null,
                 }
                 var _longClickTimeout = 800;
-
-                function calculateBounds() {
-                    var el = element;
-                    screen.bounds.w = el.offsetWidth
-                    screen.bounds.h = el.offsetHeight
-                    screen.bounds.x = 0
-                    screen.bounds.y = 0
-
-                    while (el.offsetParent) {
-                        screen.bounds.x += el.offsetLeft
-                        screen.bounds.y += el.offsetTop
-                        el = el.offsetParent
-                    }
-                }
-
+//                function calculateBounds() {
+//                    var el = element;
+//                    screen.bounds.w = el.offsetWidth
+//                    screen.bounds.h = el.offsetHeight
+//                    screen.bounds.x = 0
+//                    screen.bounds.y = 0
+//
+//                    while (el.offsetParent) {
+//                        screen.bounds.x += el.offsetLeft
+//                        screen.bounds.y += el.offsetTop
+//                        el = el.offsetParent
+//                    }
+//                }
                 function deactiveFinger(index) {
                     $(".finger-" + index).removeClass("active").removeClass("longClick")
                 }
-
                 function convertPosition(event) {
                     var e = event;
                     if (e.originalEvent) {
@@ -542,32 +582,27 @@
                         return;
                     }
                     e.preventDefault()
-                    calculateBounds()
-                    console.log("page x: " + e.pageX + ", page y: " + e.pageY)
-                    var x = e.pageX - screen.bounds.x - 30
-                    var y = e.pageY - screen.bounds.y
-
+//                    calculateBounds()
+                    var x = e.offsetX - 30
+                    var y = e.offsetY
+                    console.log("page x: " + e.offsetX + ", page y: " + e.offsetY)
                     return {
                         e: e,
-                        x: Math.floor(x / (element.clientWidth - 60) * self.display.width),
-                        y: Math.floor(y / element.clientHeight * self.display.height),
+                        x: Math.floor(x / (element.clientWidth - 60) * imgX),
+                        y: Math.floor(y / element.clientHeight * imgY),
                         pageX: x,
-                        pageY: y
+                        pageY: y,
                     }
                 }
-
                 function stopMousing() {
                     element.removeEventListener('mousemove', mouseMoveListener);
                     document.removeEventListener('mouseup', mouseUpListener);
                 }
-
                 function mouseUpListener(event) {
                     var p = convertPosition(event);
                     stopMousing()
-
                     var first = screen.firstPosition,
                         second = screen.secondPosition;
-
                     screen.secondPosition = {};
                     element.style.cursor = 'not-allowed'
                     clearTimeout(screen.longClickKey);
@@ -592,7 +627,6 @@
                         element.style.cursor = 'auto'
                     })
                 }
-
                 function mouseMoveListener(event) {
                     var p = convertPosition(event);
                     var first = screen.firstPosition;
@@ -611,7 +645,6 @@
                         screen.secondPosition = {};
                     }
                 }
-
                 function mouseDownListener(event) {
                     if (element.style.cursor == 'not-allowed') {
                         return;
@@ -621,21 +654,17 @@
                     $(".finger-" + index)
                         .addClass("active")
                         .css("transform", 'translate3d(' + p.pageX + 'px,' + p.pageY + 'px,0)')
-
                     screen.longClickKey = setTimeout(function () {
                         $(".finger-0").addClass("longClick");
                     }, _longClickTimeout)
-
                     screen.beginTime = new Date().getTime();
                     screen.firstPosition = {
                         x: p.x,
                         y: p.y
                     }
-
                     element.addEventListener('mousemove', mouseMoveListener);
                     document.addEventListener('mouseup', mouseUpListener);
                 }
-
                 element.addEventListener("mousedown", mouseDownListener);
             }
         }
@@ -643,74 +672,63 @@
 </script>
 
 <script type="text/javascript">
-
-function upload() {
-    var file = document.getElementById("uploadfile");
-    var fileInfo = file.files[0];
-    console.log(fileInfo);
-    if(!fileInfo){
-        alert("请选择文件！");
-        return false;
+    function upload() {
+        var file = document.getElementById("uploadfile");
+        var fileInfo = file.files[0];
+        console.log(fileInfo);
+        if (!fileInfo) {
+            alert("请选择文件！");
+            return false;
+        }
+        var fileName = fileInfo.name;
+        //获取文件后缀名
+        var file_typename = fileName.substring(
+            fileName.lastIndexOf('.') + 1, fileName.length);
+        if (file_typename.toLowerCase() != 'ipa') {
+            alert("请上传.ipa类型的文件！");
+            return false;
+        }
+        try {
+            $.ajaxFileUpload({
+                url: '/ios/upload',   //提交的路径
+                type: 'post',
+                secureuri: false, // 是否启用安全提交，默认为false
+                fileElementId: 'uploadfile', // file控件id
+                dataType: 'json',
+                data: {},
+                success: function (data, status) {
+                    console.log(data);
+                    console.log(status);
+                },
+                error: function (data, status) {
+                    alert("上传失败");
+                }
+            });
+        } catch (err) {
+            alert("请上传.ipa文件，不要上传其它类型！" + err.message);
+        }
     }
-
-    var fileName = fileInfo.name;
-    //获取文件后缀名
-    var file_typename = fileName.substring(
-        fileName.lastIndexOf('.') + 1, fileName.length);
-    if(file_typename.toLowerCase() != 'ipa'){
-        alert("请上传.ipa类型的文件！");
-        return false;
-    }
-
-    try{
-        $.ajaxFileUpload({
-            url : '/ios/upload',   //提交的路径
-            type: 'post',
-            secureuri : false, // 是否启用安全提交，默认为false
-            fileElementId : 'uploadfile', // file控件id
-            dataType : 'json',
-            data:{
-
-            },
-            success : function(data, status) {
-                console.log(data);
-                console.log(status);
-            },
-            error : function(data, status) {
-                alert("上传失败");
-            }
-        });
-    } catch(err) {
-        alert("请上传.ipa文件，不要上传其它类型！" + err.message);
-    }
-
-}
 </script>
 
 <script>
     var WSURL = "ws://" + window.location.host + "/websocket"
     /*jshint browser:true*/
-
     // BackFrame stores the latest frame retrieved from the socket. It does no
     // other work and can be swapped at any time.
     function BackFrame() {
         this.blob = null
     }
-
     BackFrame.prototype.swap = function (blob) {
         this.blob = blob
     }
-
     BackFrame.prototype.consume = function () {
         var blob = this.blob
         this.blob = null
         return blob
     }
-
     BackFrame.prototype.destroy = function () {
         this.consume()
     }
-
     // FrontFrame takes a blob from the BackFrame and loads it into an image.
     // There are two FrontFrames. One is always loading the next image and one
     // is always being used to render the latest fully loaded image. They're
@@ -723,29 +741,24 @@ function upload() {
         this.loading = false
         this.loaded = false
         this.fresh = false
-
         this.onLoad = function () {
             this.loading = false
             this.loaded = true
             this.fresh = true
         }.bind(this)
-
         this.onError = function () {
             this.loading = false
             this.loaded = false
         }.bind(this)
     }
-
     FrontFrame.prototype.load = function (blob) {
         // If someone's calling load() they're already sure that they don't need
         // the the current frame anymore.
         this.reset()
-
         // Convenience check that must come after the reset.
         if (!blob) {
             return
         }
-
         this.blob = blob
         this.url = URL.createObjectURL(this.blob)
         this.loading = true
@@ -755,7 +768,6 @@ function upload() {
         this.image.onerror = this.onError
         this.image.src = this.url
     }
-
     FrontFrame.prototype.reset = function () {
         this.loading = false
         this.loaded = false
@@ -765,37 +777,30 @@ function upload() {
             this.url = null
         }
     }
-
     FrontFrame.prototype.consume = function () {
         if (!this.fresh) {
             return null
         }
-
         this.fresh = false
         return this
     }
-
     FrontFrame.prototype.destroy = function () {
         this.reset()
         this.image = null
     }
-
     function Pipeline() {
         this.back = new BackFrame()
         this.mid = new FrontFrame('mid')
         this.front = new FrontFrame('front')
     }
-
     Pipeline.prototype.push = function (blob) {
         this.back.swap(blob)
-
         // If the mid frame isn't loading or waiting to be consumed, let's
         // ask it to load this new frame to speed up things.
         if (!this.mid.loading && !this.mid.loaded) {
             this.mid.load(this.back.consume())
         }
     }
-
     Pipeline.prototype.consume = function () {
         if (this.mid.loaded) {
             const mid = this.mid
@@ -805,16 +810,13 @@ function upload() {
         } else if (!this.mid.loading) {
             this.mid.load(this.back.consume())
         }
-
         return this.front.consume()
     }
-
     Pipeline.prototype.destroy = function () {
         this.back.destroy()
         this.mid.destroy()
         this.front.destroy()
     }
-
     // RenderLoop consumes and renders the pipeline.
     function RenderLoop(pipeline, canvas) {
         this.timer = null
@@ -822,20 +824,16 @@ function upload() {
         this.canvas = canvas
         this.g = canvas.getContext('2d')
     }
-
     RenderLoop.prototype.start = function () {
         this.stop()
         this.next()
     }
-
     RenderLoop.prototype.stop = function () {
         cancelAnimationFrame(this.timer)
     }
-
     RenderLoop.prototype.next = function () {
         this.timer = requestAnimationFrame(this.run.bind(this))
     }
-
     RenderLoop.prototype.run = function () {
         var frame = this.pipeline.consume()
         if (frame) {
@@ -845,38 +843,31 @@ function upload() {
         }
         this.next()
     }
-
     var pipeline = new Pipeline()
     var canvas = document.getElementById('screen')
     var renderLoop = new RenderLoop(pipeline, canvas)
-
     var ws = new WebSocket(WSURL)
     ws.binaryType = 'blob'
-
     ws.onclose = function () {
         console.log('onclose', arguments)
         renderLoop.stop()
     }
-
     ws.onerror = function () {
         console.log('onerror', arguments)
         renderLoop.stop()
     }
-
     ws.onmessage = function (message) {
-      //console.log('got jpeg', arguments)
+        //console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
             type: 'image/jpeg'
         })
         pipeline.push(blob)
     }
-
     ws.onopen = function () {
         console.log('onopen', arguments)
         ws.send('1920x1080/0')
         renderLoop.start()
     }
-
 </script>
 
 </body>
