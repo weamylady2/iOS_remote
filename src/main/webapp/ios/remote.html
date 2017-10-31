@@ -155,7 +155,7 @@
             </div>
             <div class="col-sm-12 col-md-6">
                <!-- <div class="box box-success">-->
-                    <div class="box-body">
+            <div class="box-body">
             <div class="attachment-block">                       
             <div class="form-group">
                 <div class="input-group">
@@ -169,11 +169,12 @@
 
             <div class="form-group">
                 <div class="input-group">
-                    <input id="bundleid" type="text" class="form-control" v-model="inputText"
-               placeholder="请输入bundle id">
+                    <input id="uninstallid" type="text" class="form-control" v-model="inputText"
+                           placeholder="请输入bundle id">
                     <span class="input-group-btn">
-                    <button class="btn btn-success" type="button" onclick="launchApp()">以BundleId启动App</button>
-                    </span>
+                    <button class="btn btn-success" type="button"
+                            onclick="uninstallApp()">以BundleId卸载App</button>
+                        </span>
                 </div>
             </div>
             </div>
@@ -377,7 +378,28 @@
             },
         },
     });
-
+    function refreshdetail() {
+        console.log("getting device info...");
+        var self = this;
+        $.ajax({
+            url: "/ios/getDeviceInfo?",
+            method: "GET",
+        })
+            .then(function (ret) {
+                deviceDetail.device.udid = ret.udid
+                deviceDetail.device.name = ret.name
+                deviceDetail.device.apps = ret.apps
+                deviceDetail.device.type = ret.type
+                deviceDetail.device.version = ret.version
+                console.log(udid)
+                var typeString = deviceDetail.device.type
+                var realTypeName = iosinfo[typeString]["iPhoneType"]
+                console.log(realTypeName)
+                document.getElementById('deviceTypeName').textContent = realTypeName
+                imgX = iosinfo[typeString]["ptX"]
+                imgY = iosinfo[typeString]["ptY"]
+            })
+    }
     var countTimer = new Vue({
         el: "#countTimer",
         data: {
@@ -394,7 +416,6 @@
                 function pad2(number) {
                     return (number < 10 ? '0' : '') + number
                 }
-
                 var totalSeconds = Math.floor(value / 1000); //"00:00:00"
                 var mms = value % 1000;
                 var ms = totalSeconds % 60;
@@ -410,25 +431,8 @@
             }.bind(self), 1000);
         }
     });
-
-    function refreshdetail() {
-        console.log("getting device info...");
-        $.ajax({
-            url: "/ios/getDeviceInfo?",
-            method: "GET",
-        })
-            .then(function (ret) {
-                deviceDetail.device.udid = ret.udid
-                deviceDetail.device.name = ret.name
-                deviceDetail.device.apps = ret.apps
-                deviceDetail.device.type = ret.type
-                 deviceDetail.device.version = ret.version
-                console.log(udid)
-            })
-    }
-
     function refreshlogs() {
-        if (document.getElementById('getlogbtn').textContent == "开始") {
+        if (document.getElementById('getlogbtn').textContent == "开始日志抓取") {
             var id = document.getElementById('filter-bundleid').value
             if (id == "" || id.indexOf(".") == -1) {
                 alert("请输入过滤日志的bundle id！")
@@ -436,10 +440,8 @@
             }
             deviceDetail.device.logs = "";
             console.log("开始抓取日志...");
-
             var obj = document.getElementById('logs');
-
-            ws2 = new WebSocket(WSURL2+"/"+id)
+            ws2 = new WebSocket(WSURL2 + "/" + id)
             ws2.onclose = function () {
                 console.log('ws2 onclose', arguments)
             }
@@ -454,21 +456,18 @@
                 //obj.scrollTop =  obj.scrollHeight; 
                 var scrollTop = $("#logs")[0].scrollHeight;
                 $("#logs").scrollTop(scrollTop);
-
             }
             ws2.onopen = function () {
                 console.log('ws2 onopen', arguments)
                 ws2.send(id);
             }
-            document.getElementById('getlogbtn').textContent = "停止"
-            deviceDetail.device.getlog = "停止"
+            document.getElementById('getlogbtn').textContent = "停止日志抓取"
         } else {
             ws2.close();
             console.log("停止抓取日志...");
-            document.getElementById('getlogbtn').textContent = "开始"
+            document.getElementById('getlogbtn').textContent = "开始日志抓取"
         }
     }
-
     function home() {
         $.ajax({
             url: "/ios/home",
@@ -478,7 +477,6 @@
                 console.log(ret);
             })
     }
-
     function launchApp() {
         var id = document.getElementById('bundleid').value
         if (id != "") {
@@ -491,7 +489,6 @@
                 })
         }
     }
-
     function uninstallApp() {
         var id = document.getElementById('uninstallid').value
         if (id != "") {
@@ -504,7 +501,6 @@
                 })
         }
     }
-
     function getDeviceInfo() {
         var udid = "";
         $.ajax({
@@ -516,7 +512,6 @@
                 console.log(udid)
             })
     }
-
     function sendText() {
         var sendValue = encodeURI(encodeURI(document.getElementById('input').value))
         console.log("Input Text = " + sendValue)
@@ -528,7 +523,6 @@
                 console.log(ret);
             })
     }
-
     function clearText() {
         $.ajax({
             url: "/ios/clear",
@@ -538,13 +532,10 @@
                 console.log(ret);
             })
     }
-
-
 </script>
 
 
 <script>
-
     var app = new Vue({
         el: "#screen",
         // delimiters: ["[[", "]]"],
@@ -572,14 +563,11 @@
                 name: "20170603-test",
             }]
         },
-
-
         filters: {
             formatDuration: function (value) {
                 function pad2(number) {
                     return (number < 10 ? '0' : '') + number
                 }
-
                 var totalSeconds = Math.floor(value / 1000); //"00:00:00"
                 var mms = value % 1000;
                 var ms = totalSeconds % 60;
@@ -589,7 +577,6 @@
         },
         mounted: function () {
             var self = this;
-
             this.initTouchListener();
             this.initScreenSize();
             var self = this;
@@ -605,7 +592,6 @@
             }.bind(this);
         },
         methods: {
-
             tap: function (x, y) {
                 var self = this;
                 return $.ajax({
@@ -658,7 +644,6 @@
                     console.log(ret);
                 })
             },
-
             clearText: function (n) {
                 this.sendText("\b".repeat(n || 30))
             },
@@ -688,7 +673,6 @@
                     beginTime: null,
                 }
                 var _longClickTimeout = 800;
-
 //                function calculateBounds() {
 //                    var el = element;
 //                    screen.bounds.w = el.offsetWidth
@@ -702,11 +686,9 @@
 //                        el = el.offsetParent
 //                    }
 //                }
-
                 function deactiveFinger(index) {
                     $(".finger-" + index).removeClass("active").removeClass("longClick")
                 }
-
                 function convertPosition(event) {
                     var e = event;
                     if (e.originalEvent) {
@@ -721,7 +703,6 @@
                     var x = e.offsetX - 30
                     var y = e.offsetY
                     console.log("page x: " + e.offsetX + ", page y: " + e.offsetY)
-
                     return {
                         e: e,
                         x: Math.floor(x / (element.clientWidth - 60) * imgX),
@@ -730,19 +711,15 @@
                         pageY: y,
                     }
                 }
-
                 function stopMousing() {
                     element.removeEventListener('mousemove', mouseMoveListener);
                     document.removeEventListener('mouseup', mouseUpListener);
                 }
-
                 function mouseUpListener(event) {
                     var p = convertPosition(event);
                     stopMousing()
-
                     var first = screen.firstPosition,
                         second = screen.secondPosition;
-
                     screen.secondPosition = {};
                     element.style.cursor = 'not-allowed'
                     clearTimeout(screen.longClickKey);
@@ -767,7 +744,6 @@
                         element.style.cursor = 'auto'
                     })
                 }
-
                 function mouseMoveListener(event) {
                     var p = convertPosition(event);
                     var first = screen.firstPosition;
@@ -786,7 +762,6 @@
                         screen.secondPosition = {};
                     }
                 }
-
                 function mouseDownListener(event) {
                     if (element.style.cursor == 'not-allowed') {
                         return;
@@ -796,21 +771,17 @@
                     $(".finger-" + index)
                         .addClass("active")
                         .css("transform", 'translate3d(' + p.pageX + 'px,' + p.pageY + 'px,0)')
-
                     screen.longClickKey = setTimeout(function () {
                         $(".finger-0").addClass("longClick");
                     }, _longClickTimeout)
-
                     screen.beginTime = new Date().getTime();
                     screen.firstPosition = {
                         x: p.x,
                         y: p.y
                     }
-
                     element.addEventListener('mousemove', mouseMoveListener);
                     document.addEventListener('mouseup', mouseUpListener);
                 }
-
                 element.addEventListener("mousedown", mouseDownListener);
             }
         }
@@ -818,7 +789,6 @@
 </script>
 
 <script type="text/javascript">
-
     function upload() {
         var file = document.getElementById("uploadfile");
         var fileInfo = file.files[0];
@@ -827,7 +797,6 @@
             alert("请选择文件！");
             return false;
         }
-
         var fileName = fileInfo.name;
         //获取文件后缀名
         var file_typename = fileName.substring(
@@ -836,7 +805,6 @@
             alert("请上传.ipa类型的文件！");
             return false;
         }
-
         try {
             $.ajaxFileUpload({
                 url: '/ios/upload',   //提交的路径
@@ -856,34 +824,28 @@
         } catch (err) {
             alert("请上传.ipa文件，不要上传其它类型！" + err.message);
         }
-
     }
 </script>
 
 <script>
     var WSURL = "ws://" + window.location.host + "/websocket"
     /*jshint browser:true*/
-
     // BackFrame stores the latest frame retrieved from the socket. It does no
     // other work and can be swapped at any time.
     function BackFrame() {
         this.blob = null
     }
-
     BackFrame.prototype.swap = function (blob) {
         this.blob = blob
     }
-
     BackFrame.prototype.consume = function () {
         var blob = this.blob
         this.blob = null
         return blob
     }
-
     BackFrame.prototype.destroy = function () {
         this.consume()
     }
-
     // FrontFrame takes a blob from the BackFrame and loads it into an image.
     // There are two FrontFrames. One is always loading the next image and one
     // is always being used to render the latest fully loaded image. They're
@@ -896,29 +858,24 @@
         this.loading = false
         this.loaded = false
         this.fresh = false
-
         this.onLoad = function () {
             this.loading = false
             this.loaded = true
             this.fresh = true
         }.bind(this)
-
         this.onError = function () {
             this.loading = false
             this.loaded = false
         }.bind(this)
     }
-
     FrontFrame.prototype.load = function (blob) {
         // If someone's calling load() they're already sure that they don't need
         // the the current frame anymore.
         this.reset()
-
         // Convenience check that must come after the reset.
         if (!blob) {
             return
         }
-
         this.blob = blob
         this.url = URL.createObjectURL(this.blob)
         this.loading = true
@@ -928,7 +885,6 @@
         this.image.onerror = this.onError
         this.image.src = this.url
     }
-
     FrontFrame.prototype.reset = function () {
         this.loading = false
         this.loaded = false
@@ -938,37 +894,30 @@
             this.url = null
         }
     }
-
     FrontFrame.prototype.consume = function () {
         if (!this.fresh) {
             return null
         }
-
         this.fresh = false
         return this
     }
-
     FrontFrame.prototype.destroy = function () {
         this.reset()
         this.image = null
     }
-
     function Pipeline() {
         this.back = new BackFrame()
         this.mid = new FrontFrame('mid')
         this.front = new FrontFrame('front')
     }
-
     Pipeline.prototype.push = function (blob) {
         this.back.swap(blob)
-
         // If the mid frame isn't loading or waiting to be consumed, let's
         // ask it to load this new frame to speed up things.
         if (!this.mid.loading && !this.mid.loaded) {
             this.mid.load(this.back.consume())
         }
     }
-
     Pipeline.prototype.consume = function () {
         if (this.mid.loaded) {
             const mid = this.mid
@@ -978,16 +927,13 @@
         } else if (!this.mid.loading) {
             this.mid.load(this.back.consume())
         }
-
         return this.front.consume()
     }
-
     Pipeline.prototype.destroy = function () {
         this.back.destroy()
         this.mid.destroy()
         this.front.destroy()
     }
-
     // RenderLoop consumes and renders the pipeline.
     function RenderLoop(pipeline, canvas) {
         this.timer = null
@@ -995,20 +941,16 @@
         this.canvas = canvas
         this.g = canvas.getContext('2d')
     }
-
     RenderLoop.prototype.start = function () {
         this.stop()
         this.next()
     }
-
     RenderLoop.prototype.stop = function () {
         cancelAnimationFrame(this.timer)
     }
-
     RenderLoop.prototype.next = function () {
         this.timer = requestAnimationFrame(this.run.bind(this))
     }
-
     RenderLoop.prototype.run = function () {
         var frame = this.pipeline.consume()
         if (frame) {
@@ -1018,24 +960,19 @@
         }
         this.next()
     }
-
     var pipeline = new Pipeline()
     var canvas = document.getElementById('screen')
     var renderLoop = new RenderLoop(pipeline, canvas)
-
     var ws = new WebSocket(WSURL)
     ws.binaryType = 'blob'
-
     ws.onclose = function () {
         console.log('onclose', arguments)
         renderLoop.stop()
     }
-
     ws.onerror = function () {
         console.log('onerror', arguments)
         renderLoop.stop()
     }
-
     ws.onmessage = function (message) {
         //console.log('got jpeg', arguments)
         var blob = new Blob([message.data], {
@@ -1043,13 +980,11 @@
         })
         pipeline.push(blob)
     }
-
     ws.onopen = function () {
         console.log('onopen', arguments)
         ws.send('1920x1080/0')
         renderLoop.start()
     }
-
 </script>
 
 </body>
