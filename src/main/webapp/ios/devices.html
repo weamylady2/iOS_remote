@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选择设备</title>
+    #include("/include/css.html")
+    #include("/include/js.html")
+    <style>
+        /**
+         *   Flag component
+         */
+        .flag {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        /**
+         * The traingle shape of the flag.
+         * 1. The size of the triangle.
+         */
+        .flag:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-style: solid;
+            border-width: 34px;     /* [1] */
+        }
+        /*
+         * Rotate the text and position it.
+         * 1. Put on the GPU to ensure the text is rendered correctly
+         */
+        .flag-text {
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg) translateZ(0);    /* [1] */
+            transform: rotate(-45deg) translateZ(0);
+            color: #FFF;
+            display: inline-block;
+            position: absolute;
+            top: 18px;
+            left: 0;
+            z-index: 1;
+            font-size: 12px;
+            text-transform: uppercase;
+            width: 50px;
+            text-align: center;
+        }
+        /*
+         * Modifier classes for different colour flags
+         */
+        .flag.is-new:before {
+            border-color: rgba(4,120,0,.9) transparent transparent rgba(4,120,0,.9);
+        }
+        .flag.is-popular:before {
+            border-color: rgba(206,3,5,.7) transparent transparent rgba(206,3,5,.7);
+        }
+    </style>
+</head>
+<body class="hold-transition skin-green-light layout-top-nav">
+<div class="wrapper">
+    #include("/include/header.html")
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content">
+            <!--<div class="box-header with-border">
+                <div class="row">
+                    <ul class="step">
+                        <li id="nav_step2" class="active" style="z-index:1">选择终端</li>
+                    </ul>
+                </div>
+            </div>-->
+            <div class="box box-success">
+                <div id="search_box" class="box-body"></div>
+            </div>
+            <div class="box box-success">
+                <div id="deviceList_box" class="box-body" style="padding-left:50px"></div>
+            </div>
+        </section>
+    </div>
+
+</div>
+
+
+<script id="J_tmpl-search" type="text/template">
+    <div id="brands" class="search"><span>终端品牌：</span><ul class="list-horizontal">
+        <& _.each(brands, function(itm, i, d) { &>
+        <li><&= itm &></li>
+        <& }) &>
+    </ul></div>
+    <div id="sysVersions" class="search"><span>系统版本：</span><ul class="list-horizontal">
+        <& _.each(sysVersions, function(itm, i, d) { &>
+        <li><&= itm &></li>
+        <& }) &>
+    </ul></div>
+    <div id="screens" class="search"><span>屏幕尺寸：</span><ul class="list-horizontal">
+        <& _.each(screens, function(itm, i, d) { &>
+        <li><&= itm &></li>
+        <& }) &>
+    </ul></div>
+    <div id="resolutions" class="search"><span>分辨率：</span><ul class="list-horizontal">
+        <& _.each(resolutions, function(itm, i, d) { &>
+        <li><&= itm &></li>
+        <& }) &>
+    </ul></div>
+</script>
+<script type="text/javascript">
+
+    $.ajax({
+        type: "get",
+        url: "/ios/getSearchCondition"
+    }).then(function(ret) {
+        search(ret);
+    });
+
+    var search = function(data) {
+        var $searchBox = $('#search_box');
+        var compiled = _.template($('#J_tmpl-search').html());
+        $searchBox.html(compiled(data));
+        $buttons = $searchBox.find("li");
+        $buttons.each(function () {
+            $(this).click(function() {
+                var terminalBrands = '';
+                var sysVersions = '';
+                var screens = '';
+                var resolutions = '';
+
+                if($(this).hasClass("selected")) {
+                    $(this).removeClass("selected");
+                } else {
+                    $(this).addClass("selected")
+                }
+
+                $('#brands .selected').each(function() {
+                    terminalBrands += $(this).text()+",";
+                });
+                $('#sysVersions .selected').each(function() {
+                    sysVersions += $(this).text()+",";
+                });
+                $('#screens .selected').each(function() {
+                    screens += $(this).text()+",";
+                });
+                $('#resolutions .selected').each(function() {
+                    resolutions += $(this).text()+",";
+                });
+
+                $.ajax({
+                    url: "/ios/devicesapi?brands="+terminalBrands+"&sysVersions="+sysVersions+"&screens="+screens+"&resolutions="+resolutions,
+                    method: "GET"
+                }).then(function (ret) {
+                    items = ret.list;
+                    showDeviceList(items);
+                })
+            })
+        });
+    }
+</script>
+
+
+
+<script id="J_tmpl-devicelist" type="text/template">
+    <& _.each(items,function(itm, i, d) { &>
+    <& if ((i%4) === 0) { &>
+    <div class="row">
+        <& } &>
+
+        <div class="device box box-widget box-solid">
+            <div class="box-body">
+                <div class="img">
+                    <img src="<&= itm.terminal_icon &>" width="60px" height="120px" />
+                </div>
+
+                <div class="txt">
+                    <ul style="list-style-type:none;padding:0;">
+                        <li>品牌：<&= itm.terminal_brand &></li>
+                        <li>系统：<&= itm.sys_version &></li>
+                        <li>型号：<&= itm.terminal_verion &></li>
+                    </ul>
+                </div>
+                <div class="g-article article">
+                    <p class="flag is-new">
+                        <span class="flag-text">空闲中</span>
+                    </p>
+                </div>
+                <input name="terminal_id" checked="" type="radio" value="<&= itm.terminal_id &>" style="display:none"/>
+                <button type="button" class="btn btn-block btn-success">立即使用</button>
+            </div>
+        </div>
+
+        <& if ((i%4) === 3 || i===d.length-1) { &>
+    </div>
+    <& } &>
+    <& }) &>
+</script>
+<script>
+    var items;
+
+    var showDeviceList = function(items){
+
+        var $deviceListBox = $('#deviceList_box');
+        var compiled = _.template($('#J_tmpl-devicelist').html());
+        $deviceListBox.html(compiled(items));
+        /* $(".device").on("click", function(){
+            var checkbox = $(this).find("input")[0];
+            if ($(checkbox).prop("checked")) {
+                $(checkbox).prop("checked", false);
+                $(this).removeClass("box-danger box-solid");
+            } else {
+                $deviceListBox.find("input").prop("checked", false);
+                $(checkbox).prop("checked", true);
+                $deviceListBox.find(".device").removeClass("box-danger box-solid");
+                $(this).addClass(" box-danger box-solid");
+            }
+        });*/
+    }
+
+    $.ajax({
+        url: "/ios/devicesapi",
+        method: "GET"
+    }).then(function (ret) {
+        items = ret.list;
+        showDeviceList(items);
+    })
+</script>
+
+
+</body>
+</html>
