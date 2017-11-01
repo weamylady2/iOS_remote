@@ -62,6 +62,7 @@ public class DemoConfig extends JFinalConfig {
 		// 加载少量必要配置，随后可用PropKit.get(...)获取值
 		PropKit.use("config.properties");
 		me.setDevMode(PropKit.getBoolean("devMode", false));
+		me.setMaxPostSize(Integer.MAX_VALUE);
 	}
 	
 	/**
