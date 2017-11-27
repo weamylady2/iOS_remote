@@ -50,8 +50,8 @@ var iosinfo = {
         "ptY": 667,
     },"iPhone8,1":{
         "iPhoneType": "iPhone 6s",
-        "ptX": 320,
-        "ptY": 568,
+        "ptX": 375,
+        "ptY": 667,
     },"iPhone8,2":{
         "iPhoneType": "iPhone 6s Plus",
         "ptX": 414,
