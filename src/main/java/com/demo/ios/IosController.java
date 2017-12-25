@@ -295,6 +295,7 @@ public class IosController extends Controller {
         map.put("status", true);
         map.put("msg", "上传成功！");
         this.renderJson(map);
+        t.delete();
 
     }
 
