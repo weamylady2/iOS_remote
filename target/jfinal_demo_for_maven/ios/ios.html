@@ -204,7 +204,6 @@
     });
 
 
-
     function refreshdetail() {
         console.log("getting device info...");
         $.ajax({
@@ -221,7 +220,7 @@
 
     function refreshlogs() {
 
-        if(document.getElementById('getlogbtn').textContent == "开始"){
+        if (document.getElementById('getlogbtn').textContent == "开始") {
             deviceDetail.device.logs = "";
             console.log("开始抓取日志...");
             ws2 = new WebSocket(WSURL2)
@@ -244,7 +243,7 @@
             }
             document.getElementById('getlogbtn').textContent = "停止"
             deviceDetail.device.getlog = "停止"
-        }else{
+        } else {
             ws2.close();
             console.log("停止抓取日志...");
             document.getElementById('getlogbtn').textContent = "开始"
