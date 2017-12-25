@@ -715,8 +715,8 @@
                     console.log("page x: " + e.offsetX + ", page y: " + e.offsetY)
                     return {
                         e: e,
-                        x: Math.floor(x / (element.clientWidth - 60) * imgX),
-                        y: Math.floor(y / element.clientHeight * imgY),
+                        x: Math.floor(x / (element.clientWidth - 60) * imgH),
+                        y: Math.floor(y / element.clientHeight * imgW),
                         pageX: x,
                         pageY: y,
                     }
